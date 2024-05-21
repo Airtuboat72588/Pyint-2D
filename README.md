@@ -6,6 +6,5 @@ crea4va para la creación y manipulación de imágenes de Píxel Art, combinando
 **Autores:** Josue Hidalgo (2024800128) e Ian Guzmán (2024306630).
 
 **Ayuda**
-  **Documentación Externa:** [Link]([url](https://docs.google.com/document/d/1PCKRsqlJ30qPXeSJi2ZKZalxVhO6Ndn_uiLLqDXIbTQ/edit?usp=sharing))
-  **Video Tutorial:** [Link]([url](https://docs.google.com/document/d/1PCKRsqlJ30qPXeSJi2ZKZalxVhO6Ndn_uiLLqDXIbTQ/edit?usp=sharing))
-
+  **Documentación Externa:** https://shorturl.at/IkXRH
+  **Video Tutorial:** <Insert Link>
