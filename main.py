@@ -4,7 +4,7 @@ from tkinter import *
 root = Tk()
 root.title("Pyint-2D")
 root.state('zoomed')
-set_appearance_mode(root, "white")
+set_appearance_mode("light")
 
 edición = CTkTabview(root, width=600, height=600, )
 edición.pack()
