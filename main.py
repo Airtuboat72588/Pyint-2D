@@ -3,7 +3,14 @@ from customtkinter import *
 root = CTk()
 root.title('Custom Tkinter')
 
-Helloword = CTkLabel(root, text='Hello Word', width=40, height=28, fg_color='transparent')
-Helloword.place(x=10, y=10)
+tabview = CTkTabview(root)
+tabview.place(x=10, y=10)
+
+tabview.add('tab 1')  # add tab at the end
+tabview.add('tab 2')  # add tab at the end
+tabview.set('tab 2')  # set currently visible tab
+
+button = CTkButton(master=tabview.tab('tab 1'))
+button.place(x=10, y=10)
 
 root.mainloop()
