@@ -1,9 +1,10 @@
 from customtkinter import * 
 from tkinter import *
 
-app = CTk()
+root = Tk()
+app = CTk(root)
 app.title("Pyint-2D")
-
+root.state('zoomed')
 
 edición = CTkTabview(app)
 edición.place(x=10, y=10)
@@ -13,4 +14,4 @@ edición.add('tab 2')  # add tab at the end
 edición.set('tab 1')  # set currently visible tab
 
 
-app.mainloop()
+root.mainloop()
