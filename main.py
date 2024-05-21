@@ -2,7 +2,7 @@ from customtkinter import *
 
 app = CTk()
 app.title("Pyint-2D")
-app.attributes("-fullscreen", True)
+app.state('zoomed')
 
 edición = CTkTabview(app)
 edición.place(x=10, y=10)
