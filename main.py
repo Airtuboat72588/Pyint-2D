@@ -2,15 +2,14 @@ from customtkinter import *
 
 app = CTk()
 app.title("Pyint-2D")
+app.geometry("800x600")
 
-tabview = CTkTabview(app)
-tabview.place(x=10, y=10)
+edición = CTkTabview(app)
+edición.place(x=10, y=10)
 
-tabview.add('tab 1')  # add tab at the end
-tabview.add('tab 2')  # add tab at the end
-tabview.set('tab 1')  # set currently visible tab
+edición.add('tab 1')  # add tab at the end
+edición.add('tab 2')  # add tab at the end
+edición.set('tab 1')  # set currently visible tab
 
-button = CTkButton(tabview.tab('tab 1'))
-button.place(x=10, y=10)
 
 app.mainloop()
