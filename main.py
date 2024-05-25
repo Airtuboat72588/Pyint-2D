@@ -1,6 +1,6 @@
-from customtkinter import * 
 from tkinter import *
-from CTkTable import *
+from customtkinter import CTkTable
+from customtkinter import CTkTabview
 
 root = Tk()
 root.title("Pyint-2D")
