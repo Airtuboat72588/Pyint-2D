@@ -1,5 +1,6 @@
 from customtkinter import * 
 from tkinter import *
+from CTkTable import *
 
 root = Tk()
 root.title("Pyint-2D")
