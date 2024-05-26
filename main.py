@@ -7,6 +7,8 @@ root.title("Pyint-2D")
 root.state('zoomed')
 set_appearance_mode("light")
 
+matriz = [[0 for _ in range(16)] for _ in range(16)]
+
 def cambiar_a_símbolos():
     global color_actual
     global símbolo_actual
@@ -34,6 +36,9 @@ color_actual = "black"
 def cambiar_color(value):
     columna = value["column"]
     fila = value["row"]
+    tabla_clásica.insert(fila, columna, 0, fg_color=color_actual, bg_color=color_actual)
+    matriz[fila][columna] = 0
+    print(matriz)
     tabla_clásica.insert(fila, columna, 0, fg_color=color_actual, bg_color=color_actual)
 
 def cambiar_símbolo(value):
