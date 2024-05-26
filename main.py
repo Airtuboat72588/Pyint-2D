@@ -18,7 +18,9 @@ edición.set('Edición clásica')
 color_actual = "black"
 
 def on_click(value):
-    print(f"Cuadro clickeado: {value}")
+    columna = value["column"]
+    fila = value["row"]
+    tabla_clásica.set_cell(fila, columna, color_actual)
 
 tabla_clásica = CTkTable(master = edición.tab("Edición clásica"),row=16, column=16, command=on_click)
 tabla_clásica.pack()
