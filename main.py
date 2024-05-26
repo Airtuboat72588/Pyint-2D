@@ -35,7 +35,7 @@ def cambiar_color(value):
     columna = value["column"]
     fila = value["row"]
     tabla_clásica.insert(fila, columna, 0, fg_color=color_actual, bg_color=color_actual)
-    tabla_clásica.frame[fila, columna].configure(text="")  
+
 def cambiar_símbolo(value):
     columna = value["column"]
     fila = value["row"]
