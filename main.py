@@ -21,8 +21,6 @@ def cambiar_a_símbolos():
         color_actual = "black"
         número_actual = "0"
 
-
-
 edición = CTkTabview(root, width=600, height=600, command = cambiar_a_símbolos)
 edición.pack()
 
