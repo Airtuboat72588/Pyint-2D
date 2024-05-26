@@ -22,7 +22,7 @@ def on_click(value):
     fila = value["row"]
     tabla_clásica.frame[fila, columna].configure(fg_color=color_actual)
 
-tabla_clásica = CTkTable(master = edición.tab("Edición clásica"),row=16, column=16, command=on_click, fg_color = "white")
+tabla_clásica = CTkTable(master = edición.tab("Edición clásica"),row=16, column=16, command=on_click, padx = 0, pady = 0)
 tabla_clásica.pack()
 
 root.mainloop()

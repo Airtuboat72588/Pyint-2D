@@ -3,6 +3,8 @@
         "customtkinter",
         "fullscreen",
         "optionmenu",
+        "padx",
+        "pady",
         "tabview",
         "Tabview"
     ]
