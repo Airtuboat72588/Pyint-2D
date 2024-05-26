@@ -16,7 +16,11 @@ edición.add('Edición con símbolos')
 edición.set('Edición clásica')
 
 color_actual = "black"
-símbolo_actual = "@"
+def cambiar_a_símbolos():
+    global color_actual
+    global símbolo_actual
+    if color_actual == "black":
+        símbolo_actual = "@"
 
 def cambiar_color(value):
     columna = value["column"]
