@@ -18,5 +18,15 @@ edición.set('Edición clásica')
 tabla_clásica = CTkTable(master = edición.tab("Edición clásica"),row=12, column=12)
 tabla_clásica.pack()
 
+def on_click(event):
+    # Obtén el cuadro que fue clickeado
+    cuadro = tabla_clásica.identify(event.x, event.y)
+    
+    # Imprime las coordenadas del cuadro
+    print(f"Cuadro clickeado: {cuadro}")
+
+# Vincula el evento de clic del ratón a la función on_click
+tabla_clásica.bind("<Button-1>", on_click)
+
 
 root.mainloop()
