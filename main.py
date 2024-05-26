@@ -15,10 +15,7 @@ edición.add('Edición con números')
 edición.add('Edición con símbolos')
 edición.set('Edición clásica')
 
-tabla_clásica = CTkTable(master = edición.tab("Edición clásica"),row=12, column=12)
+tabla_clásica = CTkTable(master = edición.tab("Edición clásica"),row=16, column=16)
 tabla_clásica.pack()
-
-
-
 
 root.mainloop()
