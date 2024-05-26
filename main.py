@@ -16,13 +16,21 @@ edición.add('Edición con símbolos')
 edición.set('Edición clásica')
 
 color_actual = "black"
+símbolo_actual = "@"
 
-def on_click(value):
+def cambiar_color(value):
     columna = value["column"]
     fila = value["row"]
     tabla_clásica.frame[fila, columna].configure(fg_color=color_actual)
+def cambiar_símbolo(value):
+    columna = value["column"]
+    fila = value["row"]
+    tabla_símbolos.frame[fila, columna].configure(text=símbolo_actual)
 
-tabla_clásica = CTkTable(master = edición.tab("Edición clásica"),row=10, column=10, command=on_click, padx = 0, colors = ["white", "white"], width=50, height=50)
+tabla_clásica = CTkTable(master = edición.tab("Edición clásica"),row=16, column=16, command=cambiar_color, padx = 0, colors = ["white", "white"], width=50, height=50)
 tabla_clásica.pack()
+
+tabla_símbolos = CTkTable(master = edición.tab("Edición con símbolos"),row=16, column=16, command=cambiar_símbolo, padx = 0, colors = ["white", "white"], width=50, height=50)
+tabla_símbolos.pack()
 
 root.mainloop()
