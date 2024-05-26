@@ -15,7 +15,10 @@ edición.add('Edición con números')
 edición.add('Edición con símbolos')
 edición.set('Edición clásica')
 
-tabla_clásica = CTkTable(master = edición.tab("Edición clásica"),row=16, column=16)
+def on_click(row, column, value):
+    print(f"Cuadro clickeado: {row}, {column}, {value}")
+
+tabla_clásica = CTkTable(master = edición.tab("Edición clásica"),row=16, column=16, command=on_click)
 tabla_clásica.pack()
 
 root.mainloop()
