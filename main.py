@@ -11,6 +11,7 @@ def cambiar_a_símbolos():
     global color_actual
     global símbolo_actual
     global número_actual
+    print(tabla_símbolos.get())
     if edición.get() == "Edición con símbolos":
         if color_actual == "black":
             símbolo_actual = "@"
