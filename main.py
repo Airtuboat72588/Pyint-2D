@@ -39,7 +39,7 @@ def cambiar_color(value):
     tabla_clásica.insert(fila, columna, 0, fg_color=color_actual, bg_color=color_actual)
     matriz[fila][columna] = 0
     print(matriz)
-    tabla_clásica.insert(fila, columna, 0, fg_color=color_actual, bg_color=color_actual)
+    tabla_clásica.config
 
 def cambiar_símbolo(value):
     columna = value["column"]
