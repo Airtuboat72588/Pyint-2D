@@ -45,6 +45,7 @@ def cambiar_símbolo(value):
     columna = value["column"]
     fila = value["row"]
     tabla_símbolos.frame[fila, columna].configure(text=símbolo_actual)
+    
 def cambiar_número(value):
     columna = value["column"]
     fila = value["row"]
