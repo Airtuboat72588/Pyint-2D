@@ -54,15 +54,16 @@ color_actual = "black"
 def cambiar_color(value):
     columna = value["column"]
     fila = value["row"]
-    tabla_clásica.insert(fila, columna, 0, fg_color=color_actual, bg_color=color_actual)
-    matriz[fila][columna] = 0
+    tabla_clásica.insert(fila, columna, 1, fg_color=color_actual, bg_color=color_actual)
+    matriz[fila][columna] = 1
     print(matriz)
-    tabla_clásica.config
+    tabla_clásica.frame[fila, columna].configure(text="")
 
 def cambiar_símbolo(value):
     columna = value["column"]
     fila = value["row"]
     tabla_símbolos.frame[fila, columna].configure(text=símbolo_actual)
+    
 def cambiar_número(value):
     columna = value["column"]
     fila = value["row"]

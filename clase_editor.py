@@ -23,7 +23,7 @@ class Editor:
 
     # Guardar: va a guardar la imagen (matriz numérica) en formato .json #
     def guardar_img(self):
-        pass
+        print("Hello World!")
 
     # Cargar: va a cargar la imagen (matriz numérica) en formato .json y desplegar por default la imagen en color #
     def cargar_img(self):
