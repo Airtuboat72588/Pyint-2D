@@ -69,13 +69,13 @@ def cambiar_número(value):
     fila = value["row"]
     tabla_números.frame[fila, columna].configure(text=número_actual)
 
-tabla_clásica = CTkTable(master = edición.tab("Edición clásica"),row=16, column=16, command=cambiar_color, padx = 0, colors = ["white", "white"], width=50, height=50)
+tabla_clásica = CTkTable(master = edición.tab("Edición clásica"),row=16, column=16, command=cambiar_color, padx = 2, pady = 2, colors = ["white", "white"], width=50, height=50, corner_radius = 0)
 tabla_clásica.pack()
 
-tabla_símbolos = CTkTable(master = edición.tab("Edición con símbolos"),row=16, column=16, command=cambiar_símbolo, padx = 0, colors = ["white", "white"], width=50, height=50)
+tabla_símbolos = CTkTable(master = edición.tab("Edición con símbolos"),row=16, column=16, command=cambiar_símbolo, padx = 2, pady = 2, colors = ["white", "white"], width=50, height=50, corner_radius = 0)
 tabla_símbolos.pack()
 
-tabla_números = CTkTable(master = edición.tab("Edición con números"),row=16, column=16, command=cambiar_número, padx = 0, colors = ["white", "white"], width=50, height=50)
+tabla_números = CTkTable(master = edición.tab("Edición con números"),row=16, column=16, command=cambiar_número, padx = 2, pady = 2, colors = ["white", "white"], width=50, height=50, corner_radius = 0)
 tabla_números.pack()
 
 root.mainloop()
