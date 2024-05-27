@@ -1,10 +1,22 @@
+# Imports #
+
+# Importamos las clases necesarias
+from clase_editor import Editor
+
+# Importamos las librerías necesarias
 from customtkinter import * 
 from tkinter import *
 from CTkTable import *
 
+# Inicio #
+
+# Crear una Ventana Nueva de Tkinter #
 root = Tk()
+# Configuración de la Ventana #
 root.title("Pyint-2D")
+# Maximizar la Ventana #
 root.state('zoomed')
+# Cambiar el Fondo de la Ventana a brillante #
 set_appearance_mode("light")
 
 matriz = [[0 for _ in range(16)] for _ in range(16)]
@@ -26,6 +38,7 @@ def cambiar_a_símbolos():
 edición = CTkTabview(root, width=600, height=600, command = cambiar_a_símbolos)
 edición.pack()
 
+# Agregar pestañas al Tabview #
 edición.add('Edición clásica')
 edición.add('Edición con números')
 edición.add('Edición con símbolos')
