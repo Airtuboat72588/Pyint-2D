@@ -10,6 +10,11 @@ from CTkTable import *
 
 # Inicio #
 
+# Menú #
+# Vamos a hacer el menu de nuestro proyecto para navegar entre funcionalidades #
+
+
+
 # Crear una Ventana Nueva de Tkinter #
 root = Tk()
 # Configuración de la Ventana #
