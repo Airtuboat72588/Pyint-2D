@@ -2,7 +2,6 @@ from tkinter import *
 from CTkTable import *
 from customtkinter import *
 from clase_editor import Editor
-
 class root(Tk):
     def __init__(self):
         super().__init__()
@@ -11,7 +10,7 @@ class root(Tk):
         set_appearance_mode("light")
 
         self.matriz = [[0 for _ in range(16)] for _ in range(16)]
-        self.color_actual = "black"
+        self.color_actual = "Black"
         self.símbolo_actual = None
         self.número_actual = None
 
@@ -31,6 +30,8 @@ class root(Tk):
 
         self.tabla_números = CTkTable(master=self.edición.tab("Edición con números"), row=16, column=16, command=self.cambiar_número, padx=2, pady=2, colors=["white", "white"], width=50, height=50, corner_radius=0)
         self.tabla_números.pack()
+
+        self.selección_de_color = "black"
 
     def set_appearance_mode(self, mode):
         # Implementa la lógica para cambiar el modo de apariencia aquí
