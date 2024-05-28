@@ -33,10 +33,6 @@ class root(Tk):
 
         self.selección_de_color = "black"
 
-    def set_appearance_mode(self, mode):
-        # Implementa la lógica para cambiar el modo de apariencia aquí
-        pass
-
     def cambiar_a_símbolos(self):
         if self.edición.get() == "Edición con símbolos":
             for fila in range(16):
