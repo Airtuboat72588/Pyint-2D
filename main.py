@@ -212,6 +212,7 @@ class Editor(Tk):
                         self.tabla_clásica.insert(fila, columna, "", fg_color="#ff00fb", bg_color="#ff00fb")
                     elif self.matriz[fila][columna] == 9:
                         self.tabla_clásica.insert(fila, columna, "", fg_color="#000000", bg_color="#000000")
+                        
         elif self.edición.get() == "Edición con números":
             for fila in range(16):
                 for columna in range(16):
