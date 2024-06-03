@@ -38,7 +38,7 @@ class Editor(Tk):
         self.contenedor_edición.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         # Pestañas de edición (Numerico, Símbolos, Clásico)
-        self.edición = CTkTabview(self.contenedor_edición, width=600, height=600, command = self.cambiar_a_símbolos)
+        self.edición = CTkTabview(self.contenedor_edición, width=600, height=600, command = self.ver_matriz_img)
         self.edición.pack(pady=50)
 
         # Añadir pestañas
@@ -55,7 +55,7 @@ class Editor(Tk):
 
         # Botón de borrar
         self.icono_borrar = CTkImage(light_image=Image.open("iconos/borrar.png"), dark_image=Image.open("iconos/borrar.png"), size=(50, 50))
-        self.botón_borrar = CTkButton(self.contenedor_selección_color, text="", image=self.icono_borrar, bg_color="#c4c4c4", fg_color="#c4c4c4", command = self.borrar)
+        self.botón_borrar = CTkButton(self.contenedor_selección_color, text="", image=self.icono_borrar, bg_color="#c4c4c4", fg_color="#c4c4c4", command = self.cerrar_img)
         self.botón_borrar.pack()
 
         # Colores
@@ -112,7 +112,7 @@ class Editor(Tk):
         self.botón_guardar = CTkButton(self.contenedor_menu, text="Guardar", command= self.guardar_matriz, height=50)
         self.botón_guardar.pack(pady=2)  
 
-        self.botón_abrir = CTkButton(self.contenedor_menu, text="Abrir", command= self.abrir_matriz, height=50)
+        self.botón_abrir = CTkButton(self.contenedor_menu, text="Abrir", command= self.cargar_matriz, height=50)
         self.botón_abrir.pack(pady=2)  
 
         self.botón_rotar_de = CTkButton(self.contenedor_menu, text="Rotar Derecha", command= lambda: self.transformar(self.botón_rotar_de), height=50)
@@ -135,37 +135,33 @@ class Editor(Tk):
 
     # Métodos #
 
-    # Método para transformar la matriz
-    def transformar(self):
+    # Funcion para imprimir atributos del objeto creado
+    def atributos(self):
+        print("Matriz: ", self.Matriz)
+        print("Creador: ", self.Creador)
+        print("Estado del Programa: ", self.EstadoPrograma)
+
+    # Guardar: va a guardar la imagen (matriz numérica) en formato .json #
+    def guardar_matriz(self):
+        nombre_archivo = filedialog.asksaveasfilename(defaultextension=".Pyint", filetypes=[("Pyint files", "*.Pyint")])
+        if nombre_archivo:
+            with open(nombre_archivo, 'w') as f:
+                json.dump(self.matriz, f)
+
+    # Cargar: va a cargar la imagen (matriz numérica) en formato .json y desplegar por default la imagen en color #
+    def cargar_matriz(self):
+        nombre_archivo = filedialog.askopenfilename(defaultextension=".Pyint", filetypes=[("Pyint files", "*.Pyint")])
+        if nombre_archivo:
+            with open(nombre_archivo, 'r') as f:
+                self.matriz = json.load(f)
+            self.ver_matriz_img()
+
+    # Editar: va a permitir editar la imagen (matriz numérica) en color #
+    def editar_img(self):
         pass
 
-    # Método para seleccionar un color
-    def seleccionar_color(self, color, número_de_color, símbolo):
-        self.color_actual = color
-        self.número_actual = número_de_color
-        self.símbolo_actual = símbolo
-    
-    # Método para borrar la matriz
-    def borrar(self):
-        if self.edición.get() == "Edición clásica":
-            for fila in range(16):
-                for columna in range(16):
-                    self.tabla_clásica.insert(fila, columna, "", fg_color="#FFFFFF", bg_color="#FFFFFF")
-        elif self.edición.get() == "Edición con símbolos":
-            for fila in range(16):
-                for columna in range(16):
-                    self.tabla_símbolos.frame[fila, columna].configure(text="")
-        elif self.edición.get() == "Edición con números":
-            for fila in range(16):
-                for columna in range(16):
-                    self.tabla_números.frame[fila, columna].configure(text="")
-        self.matriz = [[0 for _ in range(16)] for _ in range(16)]
-        self.tabla_clásica.clear()
-        self.tabla_símbolos.clear()
-        self.tabla_números.clear()
-
-    # Método para cambiar a símbolos
-    def cambiar_a_símbolos(self):
+    # Ver: va a permitir ver la imagen (ya sea a color, números y símbolos) en color #
+    def ver_matriz_img(self):
         if self.edición.get() == "Edición con símbolos":
             for fila in range(16):
                 for columna in range(16):
@@ -262,21 +258,192 @@ class Editor(Tk):
         #print(self.matriz)
         self.tabla_números.frame[fila, columna].configure(text= str(self.número_actual))
 
-    # Método para guardar la matriz
-    def guardar_matriz(self):
-        nombre_archivo = filedialog.asksaveasfilename(defaultextension=".Pyint", filetypes=[("Pyint files", "*.Pyint")])
-        if nombre_archivo:
-            with open(nombre_archivo, 'w') as f:
-                json.dump(self.matriz, f)
+    # Cerrar: va a limpiar el lienzo para crear una imagen más #
+    def cerrar_img(self):
+        if self.edición.get() == "Edición clásica":
+            for fila in range(16):
+                for columna in range(16):
+                    self.tabla_clásica.insert(fila, columna, "", fg_color="#FFFFFF", bg_color="#FFFFFF")
+        elif self.edición.get() == "Edición con símbolos":
+            for fila in range(16):
+                for columna in range(16):
+                    self.tabla_símbolos.frame[fila, columna].configure(text="")
+        elif self.edición.get() == "Edición con números":
+            for fila in range(16):
+                for columna in range(16):
+                    self.tabla_números.frame[fila, columna].configure(text="")
+        self.matriz = [[0 for _ in range(16)] for _ in range(16)]
+        self.tabla_clásica.clear()
+        self.tabla_símbolos.clear()
+        self.tabla_números.clear()
 
-    # Método para abrir una matriz
-    def abrir_matriz(self):
-        nombre_archivo = filedialog.askopenfilename(defaultextension=".Pyint", filetypes=[("Pyint files", "*.Pyint")])
-        if nombre_archivo:
-            with open(nombre_archivo, 'r') as f:
-                self.matriz = json.load(f)
-            self.cambiar_a_símbolos()
+    # Zoom_In: va a permitir hacer zoom in a la imagen por cuadrantes (4 cuadrantes) #
+    def zoom_in(self):
+        pass
 
+    # Zoom_Out: va a permitir hacer zoom out (devuelve a tamaño convensional) #
+    def zoom_out(self):
+        pass
+
+    # Función que llamará a las funciones de transformaciones dependiendo del botón que se presione 
+    def transformar(self):
+        pass
+
+    # Rotar Derecha: va a permitir rotar la imagen 90 grados a la derecha, es decir convierte las filas en columnas y viseversa de manera que... #
+    # ... la ultima fila será la primera columna, la primer columna será, la primera fila será la ultima columna y la ultima columna será la última fila #
+    def rotar_derecha_img(self):
+        
+        Matriz = self.Matriz.copy()
+
+        n = len(Matriz)
+        
+        Matriz_aux = Matriz.copy()
+
+        for i in range(n):
+            for j in range(n):
+                Matriz_aux[j][i] = Matriz[i][j] 
+
+        return Matriz_aux
+
+    # Rotar Izquierda: va a permitir rotar la imagen 90 grados a la izquierda, es decir convierte las filas en columnas y viseversa de manera que... #
+    # ... la ultima fila será la última columna, la primer columna será la ultima fila, la primera fila será la primera columna y la ultima columna será la última fila #
+    def rotar_izquierda_img(self):
+        Matriz = self.Matriz.copy()
+        n = len(Matriz)
+        
+        Matriz_aux = Matriz.copy()
+
+        for i in range(n):
+            for j in range(n):
+                Matriz_aux[j][i] = Matriz[i][n-j-1] 
+
+        return Matriz_aux
+
+    # Espejo Horizontal: va a permitir hacer un espejo horizontal de la imagen de manera que...#
+    # ... la primera fila será la ultima fila, la segunda fila será la penultima fila y así sucesivamente #
+    def espejo_horizontal(self):
+        Matriz = self.Matriz
+        n = len(Matriz)
+        Matriz_aux = Matriz.copy()
+
+        for i in range(n):
+            for j in range(n):
+                
+                Matriz_aux[i][j] = Matriz[n-i-1][j]
+
+        return Matriz_aux
+
+    # Espejo Vertical: va a permitir hacer un espejo vertical de la imagen de manera que...#
+    # ... la primera columna será la última columna, la segunda columna será la penultima columna y así sucesivamente #
+    def espejo_vertical(self):
+        Matriz = self.Matriz.copy()
+
+        n = len(Matriz)
+        Matriz_aux = Matriz.copy()
+
+        for i in range(n):
+            for j in range(n):
+                Matriz_aux[i][j] = Matriz[i][n-j-1]
+
+        return Matriz_aux
+                
+
+    # Escala de Grises: va a permitir convertir la imagen a escala de grises de manera que los colores más cercanos al 0 seran 0 y...#
+    # ... los colores más cercanos al 9 seran 9 #
+    def alto_contraste(self):
+        Matriz = self.Matriz.copy()
+        
+        n = len(Matriz)
+
+        for i in range(n):
+            for j in range(n):
+                if Matriz[i][j] == 0:
+                    Matriz[i][j] = 0
+                elif 0 < Matriz[i][j] < 4:
+                    Matriz[i][j] = 10
+                elif 4 <= Matriz[i][j] < 7:
+                    Matriz[i][j] = 11
+                elif 7 <= Matriz[i][j] < 10:
+                    Matriz[i][j] = 12
+                elif 10 <= Matriz[i][j] < 13:
+                    return "Matriz ya esta en escala de grises"
+        
+        return Matriz
+
+    # Negativo: va a permitir convertir la imagen a negativo de manera que los colores más cercanos al 0 (de 0 a 5) seran su contraparte más cercano al 9 (de 5 a 9) #
+    def negativo(self):
+        Matriz = self.Matriz.copy()
+
+        n = len(Matriz)
+
+        for i in range(n):
+            for j in range(n):
+
+                match Matriz[i][j]:
+                    case 0:
+                        Matriz[i][j] = 9
+                    case 1:
+                        Matriz[i][j] = 8
+                    case 2:
+                        Matriz[i][j] = 7
+                    case 3:
+                        Matriz[i][j] = 6
+                    case 4:
+                        Matriz[i][j] = 5
+                    case 5:
+                        Matriz[i][j] = 4
+                    case 6:
+                        Matriz[i][j] = 3
+                    case 7:
+                        Matriz[i][j] = 2
+                    case 8:
+                        Matriz[i][j] = 1
+                    case 9:
+                        Matriz[i][j] = 0
+        
+        return Matriz
+
+
+    # ASCII_Art: Este hace cumplir una tabla en la que cada número va a tener un simbolo asignado de la siguiente manera: #
+    # 0: " ", 1: ".", 2: ":", 3: "-", 4: "=", 5: "¡", 6: "&", 7: "$", 8: "%", 9: "@" #
+    def ASCII_Art(self):
+        
+        Matriz = self.Matriz.copy()
+
+        n = len(Matriz)
+
+        for i in range(n):
+            for j in range(n):    
+                match Matriz[i][j]:
+                    case 0:
+                        Matriz[i][j] = " "
+                    case 1:
+                        Matriz[i][j] = "."
+                    case 2:
+                        Matriz[i][j] = ":"
+                    case 3:
+                        Matriz[i][j] = "-"
+                    case 4:
+                        Matriz[i][j] = "="
+                    case 5:
+                        Matriz[i][j] = "¡"
+                    case 6:
+                        Matriz[i][j] = "&"
+                    case 7:
+                        Matriz[i][j] = "$"
+                    case 8:
+                        Matriz[i][j] = "%"
+                    case 9:
+                        Matriz[i][j] = "@"
+        
+        return Matriz
+
+
+    # Método para seleccionar un color
+    def seleccionar_color(self, color, número_de_color, símbolo):
+        self.color_actual = color
+        self.número_actual = número_de_color
+        self.símbolo_actual = símbolo
 
 Editor = Editor()
 Editor.mainloop()
