@@ -5,6 +5,7 @@
         "optionmenu",
         "padx",
         "pady",
+        "selc",
         "tabview",
         "Tabview"
     ]
