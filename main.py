@@ -33,7 +33,7 @@ class root(Tk):
         self.edición.set('Edición clásica')
 
         self.contenedor_selección_color = Canvas(self.main_contenedor, bg="#c4c4c4",bd=0, highlightthickness=0)
-        self.contenedor_selección_color.place(relx=0.8, rely=0.5, anchor=CENTER)
+        self.contenedor_selección_color.place(relx=0.85, rely=0.5, anchor=CENTER)
 
         self.icono_borrar = CTkImage(light_image=Image.open("iconos/borrar.png"), dark_image=Image.open("iconos/borrar.png"), size=(50, 50))
         self.botón_borrar = CTkButton(self.contenedor_selección_color, text="", image=self.icono_borrar, bg_color="#c4c4c4", fg_color="#c4c4c4", command = self.borrar)
@@ -80,7 +80,7 @@ class root(Tk):
         self.tabla_números.pack(pady=2)   
 
         self.contenedor_menu = Canvas(self.main_contenedor, bg="#c4c4c4",bd=0, highlightthickness=0)
-        self.contenedor_menu.place(relx=0.20, rely=0.5, anchor=CENTER)
+        self.contenedor_menu.place(relx=0.15, rely=0.5, anchor=CENTER)
 
         self.botón_guardar = CTkButton(self.contenedor_menu, text="Guardar", command= self.guardar_matriz, height=50)
         self.botón_guardar.pack(pady=2)  
@@ -88,10 +88,10 @@ class root(Tk):
         self.botón_abrir = CTkButton(self.contenedor_menu, text="Abrir", command= self.abrir_matriz, height=50)
         self.botón_abrir.pack(pady=2)  
 
-        self.botón_rotar_de = CTkButton(self.contenedor_menu, text="Rotar Derecha", command=self.transformar, height=50)
+        self.botón_rotar_de = CTkButton(self.contenedor_menu, text="Rotar Derecha", command= lambda: self.transformar(self.botón_rotar_de), height=50)
         self.botón_rotar_de.pack(pady=2)  
 
-        self.botón_rotar_iz = CTkButton(self.contenedor_menu, text="Rotar Izquierda", command=self.transformar, height=50)
+        self.botón_rotar_iz = CTkButton(self.contenedor_menu, text="Rotar Izquierda", command= lambda: self.transformar(self.botón_rotar_iz), height=50)
         self.botón_rotar_iz.pack(pady=2)  
 
         self.botón_reflejar_h = CTkButton(self.contenedor_menu, text="Reflejo Horizontal", command=self.transformar, height=50)
@@ -106,7 +106,7 @@ class root(Tk):
         self.botón_alto_contraste = CTkButton(self.contenedor_menu, text="Alto Contraste", command=self.transformar, height=50)
         self.botón_alto_contraste.pack(pady=2)  
 
-    def transformar(self):
+    def transformar(self, value_1):
         pass
 
     def seleccionar_color(self, color, número_de_color, símbolo):
@@ -208,21 +208,21 @@ class root(Tk):
         fila = value["row"]
         self.tabla_clásica.insert(fila, columna, self.número_actual, fg_color=self.color_actual, bg_color=self.color_actual)
         self.matriz[fila][columna] = self.número_actual
-        print(self.matriz)
+        #print(self.matriz)
         self.tabla_clásica.frame[fila, columna].configure(text="")
 
     def cambiar_símbolo(self, value):
         columna = value["column"]
         fila = value["row"]
         self.matriz[fila][columna] = self.número_actual
-        print(self.matriz)
+        #print(self.matriz)
         self.tabla_símbolos.frame[fila, columna].configure(text= self.símbolo_actual)
 
     def cambiar_número(self, value):
         columna = value["column"]
         fila = value["row"]
         self.matriz[fila][columna] = self.número_actual
-        print(self.matriz)
+        #print(self.matriz)
         self.tabla_números.frame[fila, columna].configure(text= str(self.número_actual))
 
     def guardar_matriz(self):

@@ -96,7 +96,8 @@ class Editor:
 
     # Cerrar: va a limpiar el lienzo para crear una imagen más #
     def cerrar_img(self):
-        pass
+        matriz = [[0 for _ in range(16)] for _ in range(16)]
+        return matriz
 
     # Mostrar: va mostrar la imagen a color (es muy similar a "cargar", pero esta va a funcionar para volver a ver la img a color despues de ver_matriz u otra) #
     def mostrar_img(self):
