@@ -4,6 +4,8 @@ from customtkinter import *
 from clase_editor import Editor
 import json
 from PIL import Image
+import os
+from datetime import datetime
 class root(Tk):
     def __init__(self):
         super().__init__()
@@ -12,6 +14,8 @@ class root(Tk):
         self.config(bg="#c4c4c4")
         set_appearance_mode("light")
         self.resizable(False, False)
+
+        self.creador = os.getlogin()
 
         self.matriz = [[0 for _ in range(16)] for _ in range(16)]
         self.color_actual = "White"
@@ -179,7 +183,7 @@ class root(Tk):
                         self.tabla_clásica.insert(fila, columna, "", fg_color="#ff00fb", bg_color="#ff00fb")
                     elif self.matriz[fila][columna] == 9:
                         self.tabla_clásica.insert(fila, columna, "", fg_color="#000000", bg_color="#000000")
-                        
+
         elif self.edición.get() == "Edición con números":
             for fila in range(16):
                 for columna in range(16):
@@ -230,15 +234,23 @@ class root(Tk):
         nombre_archivo = filedialog.asksaveasfilename(defaultextension=".Pyint", filetypes=[("Pyint files", "*.Pyint")])
         if nombre_archivo:
             with open(nombre_archivo, 'w') as f:
-                json.dump(self.matriz, f)
+                datos = {
+                    'matriz': self.matriz,
+                    'creador': self.creador
+                }
+                json.dump(datos, f)
 
     def abrir_matriz(self):
         nombre_archivo = filedialog.askopenfilename(defaultextension=".Pyint", filetypes=[("Pyint files", "*.Pyint")])
         if nombre_archivo:
             with open(nombre_archivo, 'r') as f:
-                self.matriz = json.load(f)
+                datos = json.load(f)
+                self.matriz = datos['matriz']
+                self.creador = datos['creador']
             self.cambiar_a_símbolos()
+            info_creador = CTkLabel(self, text=f"Creado por: {self.creador}", bg_color="#c4c4c4")
+            info_creador.place(relx=0.97, rely=0.99, anchor='se')
 
-
+            
 root = root()
 root.mainloop()
