@@ -18,65 +18,103 @@ class root(Tk):
         self.símbolo_actual = None
         self.número_actual = "0"
 
-        self.edición = CTkTabview(self, width=600, height=600, command = self.cambiar_a_símbolos)
-        self.edición.pack()
+        self.main_contenedor = Frame(self, bg="#c4c4c4", width=1920, height=1080)
+        self.main_contenedor.pack()
+
+        self.contenedor_edición = Canvas(self.main_contenedor, bg="#c4c4c4",bd=0, highlightthickness=0)
+        self.contenedor_edición.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+        self.edición = CTkTabview(self.contenedor_edición, width=600, height=600, command = self.cambiar_a_símbolos)
+        self.edición.pack(pady=50)
 
         self.edición.add('Edición clásica')
         self.edición.add('Edición con números')
         self.edición.add('Edición con símbolos')
         self.edición.set('Edición clásica')
 
-        self.icono_borrar = CTkImage(light_image=Image.open("iconos/borrar.png"), dark_image=Image.open("iconos/borrar.png"), size=(60, 60))
-        self.botón_borrar = CTkButton(self, text="", image=self.icono_borrar, bg_color="#c4c4c4", fg_color="#c4c4c4", command = self.borrar)
+        self.contenedor_selección_color = Canvas(self.main_contenedor, bg="#c4c4c4",bd=0, highlightthickness=0)
+        self.contenedor_selección_color.place(relx=0.8, rely=0.5, anchor=CENTER)
 
-        self.botón_borrar.place(x=10, y=700)
-        self.contenedor_selección_color = Canvas(self)
-        self.contenedor_selección_color.place(x=50, y=50)
+        self.icono_borrar = CTkImage(light_image=Image.open("iconos/borrar.png"), dark_image=Image.open("iconos/borrar.png"), size=(50, 50))
+        self.botón_borrar = CTkButton(self.contenedor_selección_color, text="", image=self.icono_borrar, bg_color="#c4c4c4", fg_color="#c4c4c4", command = self.borrar)
+        self.botón_borrar.pack()
+
         self.colors = ["#FFFFFF", "#ff0000", "#ff7700", "#ffe600", "#00ff0d", "#00ffee", "#0011ff", "#7b00ff", "#ff00fb", "#000000"]
         self.botón1_sel_color = CTkButton(self.contenedor_selección_color, bg_color= "#c4c4c4",fg_color=self.colors[0], width=50, height=50, text = "", command=lambda: self.seleccionar_color(self.colors[0], número_de_color = 0, símbolo = ""))
-        self.botón1_sel_color.pack()
+        self.botón1_sel_color.pack(pady=2)
 
         self.botón2_sel_color = CTkButton(self.contenedor_selección_color, bg_color= "#c4c4c4",fg_color=self.colors[1], width=50, height=50, text = "", command=lambda: self.seleccionar_color(self.colors[1], número_de_color = 1, símbolo = "."))
-        self.botón2_sel_color.pack()
+        self.botón2_sel_color.pack(pady=2)
 
         self.botón3_sel_color = CTkButton(self.contenedor_selección_color, bg_color= "#c4c4c4",fg_color=self.colors[2], width=50, height=50, text = "", command=lambda: self.seleccionar_color(self.colors[2], número_de_color = 2, símbolo = ":"))
-        self.botón3_sel_color.pack()
+        self.botón3_sel_color.pack(pady=2)
 
         self.botón4_sel_color = CTkButton(self.contenedor_selección_color, bg_color= "#c4c4c4",fg_color=self.colors[3], width=50, height=50, text = "", command=lambda: self.seleccionar_color(self.colors[3], número_de_color = 3, símbolo = "-"))
-        self.botón4_sel_color.pack()
+        self.botón4_sel_color.pack(pady=2)
 
         self.botón5_sel_color = CTkButton(self.contenedor_selección_color, bg_color= "#c4c4c4",fg_color=self.colors[4], width=50, height=50, text = "", command=lambda: self.seleccionar_color(self.colors[4], número_de_color = 4, símbolo = "="))
-        self.botón5_sel_color.pack()
+        self.botón5_sel_color.pack(pady=2)
 
         self.botón6_sel_color = CTkButton(self.contenedor_selección_color, bg_color= "#c4c4c4",fg_color=self.colors[5], width=50, height=50, text = "", command=lambda: self.seleccionar_color(self.colors[5], número_de_color = 5, símbolo = "¡"))
-        self.botón6_sel_color.pack()
+        self.botón6_sel_color.pack(pady=2)
 
         self.botón7_sel_color = CTkButton(self.contenedor_selección_color, bg_color= "#c4c4c4",fg_color=self.colors[6], width=50, height=50, text = "", command=lambda: self.seleccionar_color(self.colors[6], número_de_color = 6, símbolo = "&"))
-        self.botón7_sel_color.pack()
+        self.botón7_sel_color.pack(pady=2)
 
         self.botón8_sel_color = CTkButton(self.contenedor_selección_color, bg_color= "#c4c4c4",fg_color=self.colors[7], width=50, height=50, text = "", command=lambda: self.seleccionar_color(self.colors[7], número_de_color = 7, símbolo = "$"))
-        self.botón8_sel_color.pack()
+        self.botón8_sel_color.pack(pady=2)
 
         self.botón9_sel_color = CTkButton(self.contenedor_selección_color, bg_color= "#c4c4c4",fg_color=self.colors[8], width=50, height=50, text = "", command=lambda: self.seleccionar_color(self.colors[8], número_de_color = 8, símbolo = "%"))
-        self.botón9_sel_color.pack()
+        self.botón9_sel_color.pack(pady=2)
 
         self.botón10_sel_color = CTkButton(self.contenedor_selección_color, bg_color= "#c4c4c4",fg_color=self.colors[9], width=50, height=50, text = "", command=lambda: self.seleccionar_color(self.colors[9], número_de_color = 9, símbolo = "@"))
-        self.botón10_sel_color.pack()
+        self.botón10_sel_color.pack(pady=2)
 
         self.tabla_clásica = CTkTable(master=self.edición.tab("Edición clásica"), row=16, column=16, command=self.cambiar_color, padx=2, pady=2, colors=["white", "white"], width=50, height=50, corner_radius=0)
-        self.tabla_clásica.pack()
+        self.tabla_clásica.pack(pady=2)
 
         self.tabla_símbolos = CTkTable(master=self.edición.tab("Edición con símbolos"), row=16, column=16, command=self.cambiar_símbolo, padx=2, pady=2, colors=["white", "white"], width=50, height=50, corner_radius=0)
-        self.tabla_símbolos.pack()
+        self.tabla_símbolos.pack(pady=2)
 
         self.tabla_números = CTkTable(master=self.edición.tab("Edición con números"), row=16, column=16, command=self.cambiar_número, padx=2, pady=2, colors=["white", "white"], width=50, height=50, corner_radius=0)
-        self.tabla_números.pack()   
+        self.tabla_números.pack(pady=2)   
 
-        self.botón_guardar = CTkButton(self, text="Guardar", command= self.guardar_matriz)
-        self.botón_guardar.place(x=1250, y=100)
+        self.contenedor_menu = Canvas(self.main_contenedor, bg="#c4c4c4",bd=0, highlightthickness=0)
+        self.contenedor_menu.place(relx=0.20, rely=0.5, anchor=CENTER)
 
-        self.botón_abrir = CTkButton(self, text="Abrir", command= self.abrir_matriz)
-        self.botón_abrir.place(x=1250, y=130)
+        self.botón_guardar = CTkButton(self.contenedor_menu, text="Guardar", command= self.guardar_matriz, height=50)
+        self.botón_guardar.pack(pady=2)  
+
+        self.botón_abrir = CTkButton(self.contenedor_menu, text="Abrir", command= self.abrir_matriz, height=50)
+        self.botón_abrir.pack(pady=2)  
+
+        self.botón_rotar_de = CTkButton(self.contenedor_menu, text="Rotar Derecha", command=lambda: self.transformar(1), height=50)
+        self.botón_rotar_de.pack(pady=2)  
+
+        self.botón_rotar_iz = CTkButton(self.contenedor_menu, text="Rotar Izquierda", command=lambda: self.transformar(2), height=50)
+        self.botón_rotar_iz.pack(pady=2)  
+
+        self.botón_reflejar_h = CTkButton(self.contenedor_menu, text="Reflejo Horizontal", command=lambda: self.transformar(3), height=50)
+        self.botón_reflejar_h.pack(pady=2)  
+
+        self.botón_reflejar_v = CTkButton(self.contenedor_menu, text="Reflejo Vertical", command=lambda: self.transformar(4), height=50)
+        self.botón_reflejar_v.pack(pady=2)  
+
+        self.botón_negativo = CTkButton(self.contenedor_menu, text="Negativo", command=lambda: self.transformar(5), height=50)
+        self.botón_negativo.pack(pady=2)  
+
+        self.botón_alto_contraste = CTkButton(self.contenedor_menu, text="Alto Contraste", command=lambda: self.transformar(6), height=50)
+        self.botón_alto_contraste.pack(pady=2)  
+
+    def transformar(self, valor):
+
+        value = valor
+
+        if not isinstance(value, int):
+            return "El valor ingresado no es un número"
+        else:
+            return "Todo bien"
+
     
     def seleccionar_color(self, color, número_de_color, símbolo):
         self.color_actual = color
