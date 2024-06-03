@@ -33,7 +33,7 @@ class root(Tk):
         self.edición.set('Edición clásica')
 
         self.contenedor_selección_color = Canvas(self.main_contenedor, bg="#c4c4c4",bd=0, highlightthickness=0)
-        self.contenedor_selección_color.place(relx=0.85, rely=0.5, anchor=CENTER)
+        self.contenedor_selección_color.place(relx=0.9, rely=0.5, anchor=CENTER)
 
         self.icono_borrar = CTkImage(light_image=Image.open("iconos/borrar.png"), dark_image=Image.open("iconos/borrar.png"), size=(50, 50))
         self.botón_borrar = CTkButton(self.contenedor_selección_color, text="", image=self.icono_borrar, bg_color="#c4c4c4", fg_color="#c4c4c4", command = self.borrar)
@@ -80,7 +80,7 @@ class root(Tk):
         self.tabla_números.pack(pady=2)   
 
         self.contenedor_menu = Canvas(self.main_contenedor, bg="#c4c4c4",bd=0, highlightthickness=0)
-        self.contenedor_menu.place(relx=0.15, rely=0.5, anchor=CENTER)
+        self.contenedor_menu.place(relx=0.1, rely=0.5, anchor=CENTER)
 
         self.botón_guardar = CTkButton(self.contenedor_menu, text="Guardar", command= self.guardar_matriz, height=50)
         self.botón_guardar.pack(pady=2)  
