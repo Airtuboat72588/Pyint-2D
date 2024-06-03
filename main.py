@@ -5,6 +5,8 @@ from CTkTable import *
 from customtkinter import *
 import json
 from PIL import Image
+import os
+from datetime import datetime
 
 # Clase principal
 class Editor(Tk):
@@ -21,6 +23,10 @@ class Editor(Tk):
         self.config(bg="#c4c4c4")
         set_appearance_mode("light")
         self.resizable(False, False)
+
+        #Obtiene el nombre de usuario de windows
+
+        self.creador = os.getlogin()
 
         # Atributos
         self.EstadoPrograma = "" # Creado, en proceso, terminado.
@@ -146,15 +152,23 @@ class Editor(Tk):
         nombre_archivo = filedialog.asksaveasfilename(defaultextension=".Pyint", filetypes=[("Pyint files", "*.Pyint")])
         if nombre_archivo:
             with open(nombre_archivo, 'w') as f:
-                json.dump(self.matriz, f)
+                datos = {
+                    'matriz': self.matriz,
+                    'creador': self.creador
+                }
+                json.dump(datos, f)
 
     # Cargar: va a cargar la imagen (matriz numérica) en formato .json y desplegar por default la imagen en color #
     def cargar_matriz(self):
         nombre_archivo = filedialog.askopenfilename(defaultextension=".Pyint", filetypes=[("Pyint files", "*.Pyint")])
         if nombre_archivo:
             with open(nombre_archivo, 'r') as f:
-                self.matriz = json.load(f)
+                datos = json.load(f)
+                self.matriz = datos['matriz']
+                self.creador = datos['creador']
             self.ver_matriz_img()
+            info_creador = CTkLabel(self, text=f"Creado por: {self.creador}", bg_color="#c4c4c4")
+            info_creador.place(relx=0.97, rely=0.99, anchor='se')
 
     # Editar: va a permitir editar la imagen (matriz numérica) en color #
     def editar_img(self):
