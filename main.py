@@ -121,22 +121,22 @@ class Editor(Tk):
         self.botón_abrir = CTkButton(self.contenedor_menu, text="Abrir", command= self.cargar_matriz, height=50)
         self.botón_abrir.pack(pady=2)  
 
-        self.botón_rotar_de = CTkButton(self.contenedor_menu, text="Rotar Derecha", command= lambda: self.transformar(self.botón_rotar_de), height=50)
+        self.botón_rotar_de = CTkButton(self.contenedor_menu, text="Rotar Derecha", command= lambda: self.transformar_img(valor = 1), height=50)
         self.botón_rotar_de.pack(pady=2)  
 
-        self.botón_rotar_iz = CTkButton(self.contenedor_menu, text="Rotar Izquierda", command= lambda: self.transformar(self.botón_rotar_iz), height=50)
+        self.botón_rotar_iz = CTkButton(self.contenedor_menu, text="Rotar Izquierda", command= lambda: self.transformar_img(valor = 2), height=50)
         self.botón_rotar_iz.pack(pady=2)  
 
-        self.botón_reflejar_h = CTkButton(self.contenedor_menu, text="Reflejo Horizontal", command=self.transformar, height=50)
+        self.botón_reflejar_h = CTkButton(self.contenedor_menu, text="Reflejo Horizontal", command= lambda: self.transformar_img(valor = 3), height=50)
         self.botón_reflejar_h.pack(pady=2)  
 
-        self.botón_reflejar_v = CTkButton(self.contenedor_menu, text="Reflejo Vertical", command=self.transformar, height=50)
+        self.botón_reflejar_v = CTkButton(self.contenedor_menu, text="Reflejo Vertical", command= lambda: self.transformar_img(valor = 4), height=50)
         self.botón_reflejar_v.pack(pady=2)  
 
-        self.botón_negativo = CTkButton(self.contenedor_menu, text="Negativo", command=self.transformar, height=50)
+        self.botón_negativo = CTkButton(self.contenedor_menu, text="Negativo", command= lambda: self.transformar_img(valor = 5), height=50)
         self.botón_negativo.pack(pady=2)  
 
-        self.botón_alto_contraste = CTkButton(self.contenedor_menu, text="Alto Contraste", command=self.transformar, height=50)
+        self.botón_alto_contraste = CTkButton(self.contenedor_menu, text="Alto Contraste", command= lambda: self.transformar_img(valor = 6), height=50)
         self.botón_alto_contraste.pack(pady=2)  
 
     # Métodos #
@@ -300,45 +300,60 @@ class Editor(Tk):
         pass
 
     # Función que llamará a las funciones de transformaciones dependiendo del botón que se presione 
-    def transformar(self):
-        pass
+    def transformar_img(self, valor):
+
+        if valor == 1:
+            self.matriz = self.rotar_derecha_img()
+        elif valor == 2:
+            self.matriz = self.rotar_izquierda_img()
+        elif valor == 3:
+            self.matriz = self.espejo_horizontal()
+        elif valor == 4:
+            self.matriz = self.espejo_vertical()
+        elif valor == 5:
+            self.matriz = self.negativo()
+        elif valor == 6:
+            self.matriz = self.alto_contraste()
+        else:
+            return "Valor no valido"
+        
+        self.ver_matriz_img()
+
+        return "Imagen transformada exitosamente"
+        
 
     # Rotar Derecha: va a permitir rotar la imagen 90 grados a la derecha, es decir convierte las filas en columnas y viseversa de manera que... #
     # ... la ultima fila será la primera columna, la primer columna será, la primera fila será la ultima columna y la ultima columna será la última fila #
     def rotar_derecha_img(self):
-        
-        Matriz = self.Matriz.copy()
-
+        Matriz = self.matriz
         n = len(Matriz)
-        
-        Matriz_aux = Matriz.copy()
+        Matriz_aux = [[0 for _ in range(n)] for _ in range(n)]  # Create an empty matrix of the same size
 
         for i in range(n):
             for j in range(n):
-                Matriz_aux[j][i] = Matriz[i][j] 
+                Matriz_aux[j][n-i-1] = Matriz[i][j]  # Transpose and reverse each row
 
         return Matriz_aux
 
     # Rotar Izquierda: va a permitir rotar la imagen 90 grados a la izquierda, es decir convierte las filas en columnas y viseversa de manera que... #
     # ... la ultima fila será la última columna, la primer columna será la ultima fila, la primera fila será la primera columna y la ultima columna será la última fila #
     def rotar_izquierda_img(self):
-        Matriz = self.Matriz.copy()
+        Matriz = self.matriz
         n = len(Matriz)
-        
-        Matriz_aux = Matriz.copy()
+        Matriz_aux = [[0 for _ in range(n)] for _ in range(n)]  # Create an empty matrix of the same size
 
         for i in range(n):
             for j in range(n):
-                Matriz_aux[j][i] = Matriz[i][n-j-1] 
+                Matriz_aux[n-j-1][i] = Matriz[i][j]  # Transpose and reverse each column
 
         return Matriz_aux
 
     # Espejo Horizontal: va a permitir hacer un espejo horizontal de la imagen de manera que...#
     # ... la primera fila será la ultima fila, la segunda fila será la penultima fila y así sucesivamente #
     def espejo_horizontal(self):
-        Matriz = self.Matriz
+        Matriz = self.matriz
         n = len(Matriz)
-        Matriz_aux = Matriz.copy()
+        Matriz_aux = [[0 for _ in range(n)] for _ in range(n)] 
 
         for i in range(n):
             for j in range(n):
@@ -350,10 +365,9 @@ class Editor(Tk):
     # Espejo Vertical: va a permitir hacer un espejo vertical de la imagen de manera que...#
     # ... la primera columna será la última columna, la segunda columna será la penultima columna y así sucesivamente #
     def espejo_vertical(self):
-        Matriz = self.Matriz.copy()
-
+        Matriz = self.matriz
         n = len(Matriz)
-        Matriz_aux = Matriz.copy()
+        Matriz_aux = [[0 for _ in range(n)] for _ in range(n)] 
 
         for i in range(n):
             for j in range(n):
@@ -365,30 +379,24 @@ class Editor(Tk):
     # Escala de Grises: va a permitir convertir la imagen a escala de grises de manera que los colores más cercanos al 0 seran 0 y...#
     # ... los colores más cercanos al 9 seran 9 #
     def alto_contraste(self):
-        Matriz = self.Matriz.copy()
-        
+        Matriz = self.matriz
         n = len(Matriz)
+        Matriz_aux = [[0 for _ in range(n)] for _ in range(n)] 
 
         for i in range(n):
             for j in range(n):
                 if Matriz[i][j] == 0:
                     Matriz[i][j] = 0
-                elif 0 < Matriz[i][j] < 4:
-                    Matriz[i][j] = 10
-                elif 4 <= Matriz[i][j] < 7:
-                    Matriz[i][j] = 11
-                elif 7 <= Matriz[i][j] < 10:
-                    Matriz[i][j] = 12
-                elif 10 <= Matriz[i][j] < 13:
-                    return "Matriz ya esta en escala de grises"
+                else:
+                    Matriz[i][j] = 9
         
         return Matriz
 
     # Negativo: va a permitir convertir la imagen a negativo de manera que los colores más cercanos al 0 (de 0 a 5) seran su contraparte más cercano al 9 (de 5 a 9) #
     def negativo(self):
-        Matriz = self.Matriz.copy()
-
+        Matriz = self.matriz
         n = len(Matriz)
+        Matriz_aux = [[0 for _ in range(n)] for _ in range(n)] 
 
         for i in range(n):
             for j in range(n):
@@ -422,9 +430,9 @@ class Editor(Tk):
     # 0: " ", 1: ".", 2: ":", 3: "-", 4: "=", 5: "¡", 6: "&", 7: "$", 8: "%", 9: "@" #
     def ASCII_Art(self):
         
-        Matriz = self.Matriz.copy()
-
+        Matriz = self.matriz
         n = len(Matriz)
+        Matriz_aux = [[0 for _ in range(n)] for _ in range(n)] 
 
         for i in range(n):
             for j in range(n):    
