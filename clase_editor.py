@@ -8,10 +8,10 @@ import json
 class Editor: 
 
     # Constructor #
-    def __init__(self, Matriz, Creador, EstadoPrograma):
+    def __init__(self, Matriz):
         self.Matriz = Matriz
-        self.Creador = Creador
-        self.EstadoPrograma = EstadoPrograma
+        self.Creador = "Grupo: Josue e Ian"
+        self.EstadoPrograma = "Numerico"
 
     # Funcion para imprimir atributos del objeto creado #
 

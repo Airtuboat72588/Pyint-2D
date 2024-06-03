@@ -88,34 +88,27 @@ class root(Tk):
         self.botón_abrir = CTkButton(self.contenedor_menu, text="Abrir", command= self.abrir_matriz, height=50)
         self.botón_abrir.pack(pady=2)  
 
-        self.botón_rotar_de = CTkButton(self.contenedor_menu, text="Rotar Derecha", command=lambda: self.transformar(1), height=50)
+        self.botón_rotar_de = CTkButton(self.contenedor_menu, text="Rotar Derecha", command=self.transformar, height=50)
         self.botón_rotar_de.pack(pady=2)  
 
-        self.botón_rotar_iz = CTkButton(self.contenedor_menu, text="Rotar Izquierda", command=lambda: self.transformar(2), height=50)
+        self.botón_rotar_iz = CTkButton(self.contenedor_menu, text="Rotar Izquierda", command=self.transformar, height=50)
         self.botón_rotar_iz.pack(pady=2)  
 
-        self.botón_reflejar_h = CTkButton(self.contenedor_menu, text="Reflejo Horizontal", command=lambda: self.transformar(3), height=50)
+        self.botón_reflejar_h = CTkButton(self.contenedor_menu, text="Reflejo Horizontal", command=self.transformar, height=50)
         self.botón_reflejar_h.pack(pady=2)  
 
-        self.botón_reflejar_v = CTkButton(self.contenedor_menu, text="Reflejo Vertical", command=lambda: self.transformar(4), height=50)
+        self.botón_reflejar_v = CTkButton(self.contenedor_menu, text="Reflejo Vertical", command=self.transformar, height=50)
         self.botón_reflejar_v.pack(pady=2)  
 
-        self.botón_negativo = CTkButton(self.contenedor_menu, text="Negativo", command=lambda: self.transformar(5), height=50)
+        self.botón_negativo = CTkButton(self.contenedor_menu, text="Negativo", command=self.transformar, height=50)
         self.botón_negativo.pack(pady=2)  
 
-        self.botón_alto_contraste = CTkButton(self.contenedor_menu, text="Alto Contraste", command=lambda: self.transformar(6), height=50)
+        self.botón_alto_contraste = CTkButton(self.contenedor_menu, text="Alto Contraste", command=self.transformar, height=50)
         self.botón_alto_contraste.pack(pady=2)  
 
-    def transformar(self, valor):
+    def transformar(self):
+        pass
 
-        value = valor
-
-        if not isinstance(value, int):
-            return "El valor ingresado no es un número"
-        else:
-            return "Todo bien"
-
-    
     def seleccionar_color(self, color, número_de_color, símbolo):
         self.color_actual = color
         self.número_actual = número_de_color
