@@ -1,44 +1,64 @@
+
+# Importamos las librerías necesarias
 from tkinter import *
 from CTkTable import *
 from customtkinter import *
-from clase_editor import Editor
 import json
 from PIL import Image
-class root(Tk):
+
+# Clase principal
+class Editor(Tk):
+
+    # Constructor
     def __init__(self):
+
+        # Inicializamos la clase padre (quien es tkinter.Tk)
         super().__init__()
+
+        # Configuración de la ventana
         self.title("Pyint-2D")
         self.state('zoomed')
         self.config(bg="#c4c4c4")
         set_appearance_mode("light")
         self.resizable(False, False)
 
+        # Atributos
+        self.EstadoPrograma = "" # Creado, en proceso, terminado.
         self.matriz = [[0 for _ in range(16)] for _ in range(16)]
         self.color_actual = "White"
         self.símbolo_actual = None
         self.número_actual = "0"
 
+        # Contenedor principal
         self.main_contenedor = Frame(self, bg="#c4c4c4", width=1920, height=1080)
         self.main_contenedor.pack()
 
+        # Contenedores secundarios
         self.contenedor_edición = Canvas(self.main_contenedor, bg="#c4c4c4",bd=0, highlightthickness=0)
         self.contenedor_edición.place(relx=0.5, rely=0.5, anchor=CENTER)
 
+        # Pestañas de edición (Numerico, Símbolos, Clásico)
         self.edición = CTkTabview(self.contenedor_edición, width=600, height=600, command = self.cambiar_a_símbolos)
         self.edición.pack(pady=50)
 
+        # Añadir pestañas
         self.edición.add('Edición clásica')
         self.edición.add('Edición con números')
         self.edición.add('Edición con símbolos')
         self.edición.set('Edición clásica')
 
+        # Contenedor de selección de color
         self.contenedor_selección_color = Canvas(self.main_contenedor, bg="#c4c4c4",bd=0, highlightthickness=0)
         self.contenedor_selección_color.place(relx=0.9, rely=0.5, anchor=CENTER)
 
+        # Botones de selección de color (Borrar, Colores)
+
+        # Botón de borrar
         self.icono_borrar = CTkImage(light_image=Image.open("iconos/borrar.png"), dark_image=Image.open("iconos/borrar.png"), size=(50, 50))
         self.botón_borrar = CTkButton(self.contenedor_selección_color, text="", image=self.icono_borrar, bg_color="#c4c4c4", fg_color="#c4c4c4", command = self.borrar)
         self.botón_borrar.pack()
 
+        # Colores
         self.colors = ["#FFFFFF", "#ff0000", "#ff7700", "#ffe600", "#00ff0d", "#00ffee", "#0011ff", "#7b00ff", "#ff00fb", "#000000"]
         self.botón1_sel_color = CTkButton(self.contenedor_selección_color, bg_color= "#c4c4c4",fg_color=self.colors[0], width=50, height=50, text = "", command=lambda: self.seleccionar_color(self.colors[0], número_de_color = 0, símbolo = ""))
         self.botón1_sel_color.pack(pady=2)
@@ -70,18 +90,25 @@ class root(Tk):
         self.botón10_sel_color = CTkButton(self.contenedor_selección_color, bg_color= "#c4c4c4",fg_color=self.colors[9], width=50, height=50, text = "", command=lambda: self.seleccionar_color(self.colors[9], número_de_color = 9, símbolo = "@"))
         self.botón10_sel_color.pack(pady=2)
 
+        # Tablas de edición
+
+        # Tabla clásica
         self.tabla_clásica = CTkTable(master=self.edición.tab("Edición clásica"), row=16, column=16, command=self.cambiar_color, padx=2, pady=2, colors=["white", "white"], width=50, height=50, corner_radius=0)
         self.tabla_clásica.pack(pady=2)
 
+        # Tabla de símbolos
         self.tabla_símbolos = CTkTable(master=self.edición.tab("Edición con símbolos"), row=16, column=16, command=self.cambiar_símbolo, padx=2, pady=2, colors=["white", "white"], width=50, height=50, corner_radius=0)
         self.tabla_símbolos.pack(pady=2)
 
+        # Tabla de números
         self.tabla_números = CTkTable(master=self.edición.tab("Edición con números"), row=16, column=16, command=self.cambiar_número, padx=2, pady=2, colors=["white", "white"], width=50, height=50, corner_radius=0)
         self.tabla_números.pack(pady=2)   
 
+        # Contenedor de menú
         self.contenedor_menu = Canvas(self.main_contenedor, bg="#c4c4c4",bd=0, highlightthickness=0)
         self.contenedor_menu.place(relx=0.1, rely=0.5, anchor=CENTER)
 
+        # Botones de menú (Guardar, Abrir, Rotar Derecha, Rotar Izquierda, Reflejo Horizontal, Reflejo Vertical, Negativo, Alto Contraste)
         self.botón_guardar = CTkButton(self.contenedor_menu, text="Guardar", command= self.guardar_matriz, height=50)
         self.botón_guardar.pack(pady=2)  
 
@@ -106,14 +133,19 @@ class root(Tk):
         self.botón_alto_contraste = CTkButton(self.contenedor_menu, text="Alto Contraste", command=self.transformar, height=50)
         self.botón_alto_contraste.pack(pady=2)  
 
-    def transformar(self, value_1):
+    # Métodos #
+
+    # Método para transformar la matriz
+    def transformar(self):
         pass
 
+    # Método para seleccionar un color
     def seleccionar_color(self, color, número_de_color, símbolo):
         self.color_actual = color
         self.número_actual = número_de_color
         self.símbolo_actual = símbolo
     
+    # Método para borrar la matriz
     def borrar(self):
         if self.edición.get() == "Edición clásica":
             for fila in range(16):
@@ -132,6 +164,7 @@ class root(Tk):
         self.tabla_símbolos.clear()
         self.tabla_números.clear()
 
+    # Método para cambiar a símbolos
     def cambiar_a_símbolos(self):
         if self.edición.get() == "Edición con símbolos":
             for fila in range(16):
@@ -203,6 +236,7 @@ class root(Tk):
                     elif self.matriz[fila][columna] == 9:
                         self.tabla_números.frame[fila, columna].configure(text="9")
 
+    # Método para cambiar el color de una celda
     def cambiar_color(self, value):
         columna = value["column"]
         fila = value["row"]
@@ -211,6 +245,7 @@ class root(Tk):
         #print(self.matriz)
         self.tabla_clásica.frame[fila, columna].configure(text="")
 
+    # Método para cambiar el símbolo de una celda
     def cambiar_símbolo(self, value):
         columna = value["column"]
         fila = value["row"]
@@ -218,6 +253,7 @@ class root(Tk):
         #print(self.matriz)
         self.tabla_símbolos.frame[fila, columna].configure(text= self.símbolo_actual)
 
+    # Método para cambiar el número de una celda
     def cambiar_número(self, value):
         columna = value["column"]
         fila = value["row"]
@@ -225,12 +261,14 @@ class root(Tk):
         #print(self.matriz)
         self.tabla_números.frame[fila, columna].configure(text= str(self.número_actual))
 
+    # Método para guardar la matriz
     def guardar_matriz(self):
         nombre_archivo = filedialog.asksaveasfilename(defaultextension=".Pyint", filetypes=[("Pyint files", "*.Pyint")])
         if nombre_archivo:
             with open(nombre_archivo, 'w') as f:
                 json.dump(self.matriz, f)
 
+    # Método para abrir una matriz
     def abrir_matriz(self):
         nombre_archivo = filedialog.askopenfilename(defaultextension=".Pyint", filetypes=[("Pyint files", "*.Pyint")])
         if nombre_archivo:
@@ -239,5 +277,5 @@ class root(Tk):
             self.cambiar_a_símbolos()
 
 
-root = root()
-root.mainloop()
+Editor = Editor()
+Editor.mainloop()
