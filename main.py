@@ -7,6 +7,7 @@ import json
 from PIL import Image
 import os
 import numpy as np
+import copy
 
 # Clase principal
 class Editor(Tk):
@@ -27,6 +28,10 @@ class Editor(Tk):
         #Obtiene el nombre de usuario de windows
 
         self.creador = os.getlogin()
+
+        #Variable de estado del modo de alto contraste
+
+        self.alto_contraste_estado = False
 
         # Atributos
         self.EstadoPrograma = "" # Creado, en proceso, terminado.
@@ -136,7 +141,7 @@ class Editor(Tk):
         self.botón_negativo = CTkButton(self.contenedor_menu, text="Negativo", command=self.transformar, height=50)
         self.botón_negativo.pack(pady=2)  
 
-        self.botón_alto_contraste = CTkButton(self.contenedor_menu, text="Alto Contraste", command=self.transformar, height=50)
+        self.botón_alto_contraste = CTkButton(self.contenedor_menu, text="Alto Contraste", command = lambda: self.alto_contraste(), height=50)
         self.botón_alto_contraste.pack(pady=2)  
 
     # Métodos #
@@ -321,7 +326,7 @@ class Editor(Tk):
 
     # Función que llamará a las funciones de transformaciones dependiendo del botón que se presione 
     def transformar(self):
-        pass
+        pass 
 
     # Rotar Derecha: va a permitir rotar la imagen 90 grados a la derecha, es decir convierte las filas en columnas y viceversa de manera que... #
     # ... la ultima fila será la primera columna, la primer columna será, la primera fila será la ultima columna y la ultima columna será la última fila #
@@ -384,25 +389,55 @@ class Editor(Tk):
 
     # Escala de Grises: va a permitir convertir la imagen a escala de grises de manera que los colores más cercanos al 0 serán 0 y...#
     # ... los colores más cercanos al 9 serán 9 #
+    
     def alto_contraste(self):
-        Matriz = self.Matriz.copy()
-        
-        n = len(Matriz)
+        if self.alto_contraste_estado == False:
+            self.Matriz_original = copy.deepcopy(self.matriz)
+            self.alto_contraste_estado = True
+            for fila in range(16):
+                for columna in range(16):
+                    if self.matriz[fila][columna] < 5:
+                        self.matriz[fila][columna] = 0
+                    else:
+                        self.matriz[fila][columna] = 9
+            self.botón1_sel_color.configure(state='disabled')
+            self.botón2_sel_color.configure(state='disabled')
+            self.botón3_sel_color.configure(state='disabled')
+            self.botón4_sel_color.configure(state='disabled')
+            self.botón5_sel_color.configure(state='disabled')
+            self.botón6_sel_color.configure(state='disabled')
+            self.botón7_sel_color.configure(state='disabled')
+            self.botón8_sel_color.configure(state='disabled')
+            self.botón9_sel_color.configure(state='disabled')
+            self.botón10_sel_color.configure(state='disabled')
+            self.botón_rotar_de.configure(state='disabled')
+            self.botón_rotar_iz.configure(state='disabled')
+            self.botón_reflejar_h.configure(state='disabled')
+            self.botón_reflejar_v.configure(state='disabled')
+            self.botón_negativo.configure(state='disabled')
+            self.botón_borrar.configure(state='disabled')
 
-        for i in range(n):
-            for j in range(n):
-                if Matriz[i][j] == 0:
-                    Matriz[i][j] = 0
-                elif 0 < Matriz[i][j] < 4:
-                    Matriz[i][j] = 10
-                elif 4 <= Matriz[i][j] < 7:
-                    Matriz[i][j] = 11
-                elif 7 <= Matriz[i][j] < 10:
-                    Matriz[i][j] = 12
-                elif 10 <= Matriz[i][j] < 13:
-                    return "Matriz ya esta en escala de grises"
-        
-        return Matriz
+            self.ver_matriz_img()
+        else:
+            self.alto_contraste_estado = False
+            self.matriz = copy.deepcopy(self.Matriz_original)
+            self.ver_matriz_img()
+            self.botón1_sel_color.configure(state='normal')
+            self.botón2_sel_color.configure(state='normal')
+            self.botón3_sel_color.configure(state='normal')
+            self.botón4_sel_color.configure(state='normal')
+            self.botón5_sel_color.configure(state='normal')
+            self.botón6_sel_color.configure(state='normal')
+            self.botón7_sel_color.configure(state='normal')
+            self.botón8_sel_color.configure(state='normal')
+            self.botón9_sel_color.configure(state='normal')
+            self.botón10_sel_color.configure(state='normal')
+            self.botón_rotar_de.configure(state='normal')
+            self.botón_rotar_iz.configure(state='normal')
+            self.botón_reflejar_h.configure(state='normal')
+            self.botón_reflejar_v.configure(state='normal')
+            self.botón_negativo.configure(state='normal')
+            self.botón_borrar.configure(state='normal')
 
     # Negativo: va a permitir convertir la imagen a negativo de manera que los colores más cercanos al 0 (de 0 a 5) serán su contraparte más cercano al 9 (de 5 a 9) #
     def negativo(self):
