@@ -1,6 +1,8 @@
 {
     "cSpell.words": [
         "customtkinter",
+        "dtype",
+        "fromarray",
         "fullscreen",
         "optionmenu",
         "padx",

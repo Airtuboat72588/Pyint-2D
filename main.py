@@ -43,7 +43,7 @@ class Editor(Tk):
         self.contenedor_edición = Canvas(self.main_contenedor, bg="#c4c4c4",bd=0, highlightthickness=0)
         self.contenedor_edición.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        # Pestañas de edición (Numerico, Símbolos, Clásico)
+        # Pestañas de edición (Numérico, Símbolos, Clásico)
         self.edición = CTkTabview(self.contenedor_edición, width=600, height=600, command = self.ver_matriz_img)
         self.edición.pack(pady=50)
 
@@ -141,7 +141,7 @@ class Editor(Tk):
 
     # Métodos #
 
-    # Funcion para imprimir atributos del objeto creado
+    # Función para imprimir atributos del objeto creado
     def atributos(self):
         print("Matriz: ", self.Matriz)
         print("Creador: ", self.Creador)
@@ -315,7 +315,7 @@ class Editor(Tk):
     def zoom_in(self):
         pass
 
-    # Zoom_Out: va a permitir hacer zoom out (devuelve a tamaño convensional) #
+    # Zoom_Out: va a permitir hacer zoom out (devuelve a tamaño convencional) #
     def zoom_out(self):
         pass
 
@@ -323,7 +323,7 @@ class Editor(Tk):
     def transformar(self):
         pass
 
-    # Rotar Derecha: va a permitir rotar la imagen 90 grados a la derecha, es decir convierte las filas en columnas y viseversa de manera que... #
+    # Rotar Derecha: va a permitir rotar la imagen 90 grados a la derecha, es decir convierte las filas en columnas y viceversa de manera que... #
     # ... la ultima fila será la primera columna, la primer columna será, la primera fila será la ultima columna y la ultima columna será la última fila #
     def rotar_derecha_img(self):
         
@@ -339,7 +339,7 @@ class Editor(Tk):
 
         return Matriz_aux
 
-    # Rotar Izquierda: va a permitir rotar la imagen 90 grados a la izquierda, es decir convierte las filas en columnas y viseversa de manera que... #
+    # Rotar Izquierda: va a permitir rotar la imagen 90 grados a la izquierda, es decir convierte las filas en columnas y viceversa de manera que... #
     # ... la ultima fila será la última columna, la primer columna será la ultima fila, la primera fila será la primera columna y la ultima columna será la última fila #
     def rotar_izquierda_img(self):
         Matriz = self.Matriz.copy()
@@ -354,7 +354,7 @@ class Editor(Tk):
         return Matriz_aux
 
     # Espejo Horizontal: va a permitir hacer un espejo horizontal de la imagen de manera que...#
-    # ... la primera fila será la ultima fila, la segunda fila será la penultima fila y así sucesivamente #
+    # ... la primera fila será la ultima fila, la segunda fila será la penúltima fila y así sucesivamente #
     def espejo_horizontal(self):
         Matriz = self.Matriz
         n = len(Matriz)
@@ -368,7 +368,7 @@ class Editor(Tk):
         return Matriz_aux
 
     # Espejo Vertical: va a permitir hacer un espejo vertical de la imagen de manera que...#
-    # ... la primera columna será la última columna, la segunda columna será la penultima columna y así sucesivamente #
+    # ... la primera columna será la última columna, la segunda columna será la penúltima columna y así sucesivamente #
     def espejo_vertical(self):
         Matriz = self.Matriz.copy()
 
@@ -382,8 +382,8 @@ class Editor(Tk):
         return Matriz_aux
                 
 
-    # Escala de Grises: va a permitir convertir la imagen a escala de grises de manera que los colores más cercanos al 0 seran 0 y...#
-    # ... los colores más cercanos al 9 seran 9 #
+    # Escala de Grises: va a permitir convertir la imagen a escala de grises de manera que los colores más cercanos al 0 serán 0 y...#
+    # ... los colores más cercanos al 9 serán 9 #
     def alto_contraste(self):
         Matriz = self.Matriz.copy()
         
@@ -404,7 +404,7 @@ class Editor(Tk):
         
         return Matriz
 
-    # Negativo: va a permitir convertir la imagen a negativo de manera que los colores más cercanos al 0 (de 0 a 5) seran su contraparte más cercano al 9 (de 5 a 9) #
+    # Negativo: va a permitir convertir la imagen a negativo de manera que los colores más cercanos al 0 (de 0 a 5) serán su contraparte más cercano al 9 (de 5 a 9) #
     def negativo(self):
         Matriz = self.Matriz.copy()
 
@@ -438,7 +438,7 @@ class Editor(Tk):
         return Matriz
 
 
-    # ASCII_Art: Este hace cumplir una tabla en la que cada número va a tener un simbolo asignado de la siguiente manera: #
+    # ASCII_Art: Este hace cumplir una tabla en la que cada número va a tener un símbolo asignado de la siguiente manera: #
     # 0: " ", 1: ".", 2: ":", 3: "-", 4: "=", 5: "¡", 6: "&", 7: "$", 8: "%", 9: "@" #
     def ASCII_Art(self):
         
