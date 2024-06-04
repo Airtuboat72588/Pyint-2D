@@ -6,7 +6,8 @@ from customtkinter import *
 import json
 from PIL import Image
 import os
-from datetime import datetime
+import numpy as np
+import copy
 
 # Clase principal
 class Editor(Tk):
@@ -28,6 +29,10 @@ class Editor(Tk):
 
         self.creador = os.getlogin()
 
+        #Variable de estado del modo de alto contraste
+
+        self.alto_contraste_estado = False
+
         # Atributos
         self.EstadoPrograma = "" # Creado, en proceso, terminado.
         self.matriz = [[0 for _ in range(16)] for _ in range(16)]
@@ -43,7 +48,7 @@ class Editor(Tk):
         self.contenedor_edición = Canvas(self.main_contenedor, bg="#c4c4c4",bd=0, highlightthickness=0)
         self.contenedor_edición.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        # Pestañas de edición (Numerico, Símbolos, Clásico)
+        # Pestañas de edición (Numérico, Símbolos, Clásico)
         self.edición = CTkTabview(self.contenedor_edición, width=600, height=600, command = self.ver_matriz_img)
         self.edición.pack(pady=50)
 
@@ -65,7 +70,7 @@ class Editor(Tk):
         self.botón_borrar.pack()
 
         # Colores
-        self.colors = ["#FFFFFF", "#ff0000", "#ff7700", "#ffe600", "#00ff0d", "#00ffee", "#0011ff", "#7b00ff", "#ff00fb", "#000000"]
+        self.colors = ["#FFFFFF", "#FFFF00", "#FDE54C", "#FBCA97", "#BB834C", "#7B3C00", "#FE3200", "#86295D", "#0D20BA", "#000000"]
         self.botón1_sel_color = CTkButton(self.contenedor_selección_color, bg_color= "#c4c4c4",fg_color=self.colors[0], width=50, height=50, text = "", command=lambda: self.seleccionar_color(self.colors[0], número_de_color = 0, símbolo = ""))
         self.botón1_sel_color.pack(pady=2)
 
@@ -136,12 +141,12 @@ class Editor(Tk):
         self.botón_negativo = CTkButton(self.contenedor_menu, text="Negativo", command= lambda: self.transformar_img(valor = 5), height=50)
         self.botón_negativo.pack(pady=2)  
 
-        self.botón_alto_contraste = CTkButton(self.contenedor_menu, text="Alto Contraste", command= lambda: self.transformar_img(valor = 6), height=50)
+        self.botón_alto_contraste = CTkButton(self.contenedor_menu, text="Alto Contraste", command = lambda: self.alto_contraste(), height=50)
         self.botón_alto_contraste.pack(pady=2)  
 
     # Métodos #
 
-    # Funcion para imprimir atributos del objeto creado
+    # Función para imprimir atributos del objeto creado
     def atributos(self):
         print("Matriz: ", self.Matriz)
         print("Creador: ", self.Creador)
@@ -149,14 +154,34 @@ class Editor(Tk):
 
     # Guardar: va a guardar la imagen (matriz numérica) en formato .json #
     def guardar_matriz(self):
-        nombre_archivo = filedialog.asksaveasfilename(defaultextension=".Pyint", filetypes=[("Pyint files", "*.Pyint")])
+        filetypes = [("Pyint files", "*.Pyint"), ("PNG files", "*.png")]
+        nombre_archivo = filedialog.asksaveasfilename(defaultextension=".Pyint", filetypes=filetypes)
         if nombre_archivo:
-            with open(nombre_archivo, 'w') as f:
-                datos = {
-                    'matriz': self.matriz,
-                    'creador': self.creador
-                }
-                json.dump(datos, f)
+            if nombre_archivo.endswith('.png'):
+                self.matriz_a_png(self.matriz, nombre_archivo)
+            else:
+                with open(nombre_archivo, 'w') as f:
+                    datos = {
+                        'matriz': self.matriz,
+                        'creador': self.creador
+                    }
+                    json.dump(datos, f)
+    
+    def matriz_a_png(self, matriz, nombre_archivo):
+        # Convertir la matriz de índices en una matriz de colores
+        matriz_colores = [[self.colors[int(indice)] for indice in fila] for fila in matriz]
+    
+        # Convertir la matriz de colores en formato hexadecimal a una matriz de colores en formato RGB
+        matriz_rgb = [[tuple(int(hex_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4)) for hex_color in fila] for fila in matriz_colores]
+    
+        # Convertir la matriz a un array de numpy
+        array = np.array(matriz_rgb, dtype=np.uint8)
+    
+        # Crear una imagen a partir del array
+        imagen = Image.fromarray(array)
+    
+        # Guardar la imagen en un archivo .png
+        imagen.save(nombre_archivo)
 
     # Cargar: va a cargar la imagen (matriz numérica) en formato .json y desplegar por default la imagen en color #
     def cargar_matriz(self):
@@ -203,25 +228,25 @@ class Editor(Tk):
             for fila in range(16):
                 for columna in range(16):
                     if self.matriz[fila][columna] == 0:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#FFFFFF", bg_color="#FFFFFF")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color= self.colors[0], bg_color=self.colors[0])
                     elif self.matriz[fila][columna] == 1:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#ff0000", bg_color="#ff0000")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[1], bg_color=self.colors[1])
                     elif self.matriz[fila][columna] == 2:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#ff7700", bg_color="#ff7700")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[2], bg_color=self.colors[2])
                     elif self.matriz[fila][columna] == 3:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#ffe600", bg_color="#ffe600")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[3], bg_color=self.colors[3])
                     elif self.matriz[fila][columna] == 4:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#00ff0d", bg_color="#00ff0d")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[4], bg_color=self.colors[4])
                     elif self.matriz[fila][columna] == 5:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#00ffee", bg_color="#00ffee")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[5], bg_color=self.colors[5])
                     elif self.matriz[fila][columna] == 6:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#0011ff", bg_color="#0011ff")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[6], bg_color=self.colors[6])
                     elif self.matriz[fila][columna] == 7:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#7b00ff", bg_color="#7b00ff")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[7], bg_color=self.colors[7])
                     elif self.matriz[fila][columna] == 8:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#ff00fb", bg_color="#ff00fb")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[8], bg_color=self.colors[8])
                     elif self.matriz[fila][columna] == 9:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#000000", bg_color="#000000")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[9], bg_color=self.colors[9])
 
         elif self.edición.get() == "Edición con números":
             for fila in range(16):
@@ -295,7 +320,7 @@ class Editor(Tk):
     def zoom_in(self):
         pass
 
-    # Zoom_Out: va a permitir hacer zoom out (devuelve a tamaño convensional) #
+    # Zoom_Out: va a permitir hacer zoom out (devuelve a tamaño convencional) #
     def zoom_out(self):
         pass
 
@@ -322,7 +347,7 @@ class Editor(Tk):
         return "Imagen transformada exitosamente"
         
 
-    # Rotar Derecha: va a permitir rotar la imagen 90 grados a la derecha, es decir convierte las filas en columnas y viseversa de manera que... #
+    # Rotar Derecha: va a permitir rotar la imagen 90 grados a la derecha, es decir convierte las filas en columnas y viceversa de manera que... #
     # ... la ultima fila será la primera columna, la primer columna será, la primera fila será la ultima columna y la ultima columna será la última fila #
     def rotar_derecha_img(self):
         Matriz = self.matriz
@@ -335,7 +360,7 @@ class Editor(Tk):
 
         return Matriz_aux
 
-    # Rotar Izquierda: va a permitir rotar la imagen 90 grados a la izquierda, es decir convierte las filas en columnas y viseversa de manera que... #
+    # Rotar Izquierda: va a permitir rotar la imagen 90 grados a la izquierda, es decir convierte las filas en columnas y viceversa de manera que... #
     # ... la ultima fila será la última columna, la primer columna será la ultima fila, la primera fila será la primera columna y la ultima columna será la última fila #
     def rotar_izquierda_img(self):
         Matriz = self.matriz
@@ -349,7 +374,7 @@ class Editor(Tk):
         return Matriz_aux
 
     # Espejo Horizontal: va a permitir hacer un espejo horizontal de la imagen de manera que...#
-    # ... la primera fila será la ultima fila, la segunda fila será la penultima fila y así sucesivamente #
+    # ... la primera fila será la ultima fila, la segunda fila será la penúltima fila y así sucesivamente #
     def espejo_horizontal(self):
         Matriz = self.matriz
         n = len(Matriz)
@@ -363,7 +388,7 @@ class Editor(Tk):
         return Matriz_aux
 
     # Espejo Vertical: va a permitir hacer un espejo vertical de la imagen de manera que...#
-    # ... la primera columna será la última columna, la segunda columna será la penultima columna y así sucesivamente #
+    # ... la primera columna será la última columna, la segunda columna será la penúltima columna y así sucesivamente #
     def espejo_vertical(self):
         Matriz = self.matriz
         n = len(Matriz)
@@ -376,23 +401,59 @@ class Editor(Tk):
         return Matriz_aux
                 
 
-    # Escala de Grises: va a permitir convertir la imagen a escala de grises de manera que los colores más cercanos al 0 seran 0 y...#
-    # ... los colores más cercanos al 9 seran 9 #
+    # Escala de Grises: va a permitir convertir la imagen a escala de grises de manera que los colores más cercanos al 0 serán 0 y...#
+    # ... los colores más cercanos al 9 serán 9 #
+    
     def alto_contraste(self):
-        Matriz = self.matriz
-        n = len(Matriz)
-        Matriz_aux = [[0 for _ in range(n)] for _ in range(n)] 
+        if self.alto_contraste_estado == False:
+            self.Matriz_original = copy.deepcopy(self.matriz)
+            self.alto_contraste_estado = True
+            for fila in range(16):
+                for columna in range(16):
+                    if self.matriz[fila][columna] < 5:
+                        self.matriz[fila][columna] = 0
+                    else:
+                        self.matriz[fila][columna] = 9
+            self.botón1_sel_color.configure(state='disabled')
+            self.botón2_sel_color.configure(state='disabled')
+            self.botón3_sel_color.configure(state='disabled')
+            self.botón4_sel_color.configure(state='disabled')
+            self.botón5_sel_color.configure(state='disabled')
+            self.botón6_sel_color.configure(state='disabled')
+            self.botón7_sel_color.configure(state='disabled')
+            self.botón8_sel_color.configure(state='disabled')
+            self.botón9_sel_color.configure(state='disabled')
+            self.botón10_sel_color.configure(state='disabled')
+            self.botón_rotar_de.configure(state='disabled')
+            self.botón_rotar_iz.configure(state='disabled')
+            self.botón_reflejar_h.configure(state='disabled')
+            self.botón_reflejar_v.configure(state='disabled')
+            self.botón_negativo.configure(state='disabled')
+            self.botón_borrar.configure(state='disabled')
 
-        for i in range(n):
-            for j in range(n):
-                if Matriz[i][j] == 0:
-                    Matriz[i][j] = 0
-                else:
-                    Matriz[i][j] = 9
-        
-        return Matriz
+            self.ver_matriz_img()
+        else:
+            self.alto_contraste_estado = False
+            self.matriz = copy.deepcopy(self.Matriz_original)
+            self.ver_matriz_img()
+            self.botón1_sel_color.configure(state='normal')
+            self.botón2_sel_color.configure(state='normal')
+            self.botón3_sel_color.configure(state='normal')
+            self.botón4_sel_color.configure(state='normal')
+            self.botón5_sel_color.configure(state='normal')
+            self.botón6_sel_color.configure(state='normal')
+            self.botón7_sel_color.configure(state='normal')
+            self.botón8_sel_color.configure(state='normal')
+            self.botón9_sel_color.configure(state='normal')
+            self.botón10_sel_color.configure(state='normal')
+            self.botón_rotar_de.configure(state='normal')
+            self.botón_rotar_iz.configure(state='normal')
+            self.botón_reflejar_h.configure(state='normal')
+            self.botón_reflejar_v.configure(state='normal')
+            self.botón_negativo.configure(state='normal')
+            self.botón_borrar.configure(state='normal')
 
-    # Negativo: va a permitir convertir la imagen a negativo de manera que los colores más cercanos al 0 (de 0 a 5) seran su contraparte más cercano al 9 (de 5 a 9) #
+    # Negativo: va a permitir convertir la imagen a negativo de manera que los colores más cercanos al 0 (de 0 a 5) serán su contraparte más cercano al 9 (de 5 a 9) #
     def negativo(self):
         Matriz = self.matriz
         n = len(Matriz)
@@ -426,7 +487,7 @@ class Editor(Tk):
         return Matriz
 
 
-    # ASCII_Art: Este hace cumplir una tabla en la que cada número va a tener un simbolo asignado de la siguiente manera: #
+    # ASCII_Art: Este hace cumplir una tabla en la que cada número va a tener un símbolo asignado de la siguiente manera: #
     # 0: " ", 1: ".", 2: ":", 3: "-", 4: "=", 5: "¡", 6: "&", 7: "$", 8: "%", 9: "@" #
     def ASCII_Art(self):
         
