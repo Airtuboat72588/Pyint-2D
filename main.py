@@ -6,7 +6,7 @@ from customtkinter import *
 import json
 from PIL import Image
 import os
-from datetime import datetime
+import numpy as np
 
 # Clase principal
 class Editor(Tk):
@@ -65,7 +65,7 @@ class Editor(Tk):
         self.botón_borrar.pack()
 
         # Colores
-        self.colors = ["#FFFFFF", "#ff0000", "#ff7700", "#ffe600", "#00ff0d", "#00ffee", "#0011ff", "#7b00ff", "#ff00fb", "#000000"]
+        self.colors = ["#FFFFFF", "#FFFF00", "#FDE54C", "#FBCA97", "#BB834C", "#7B3C00", "#FE3200", "#86295D", "#0D20BA", "#000000"]
         self.botón1_sel_color = CTkButton(self.contenedor_selección_color, bg_color= "#c4c4c4",fg_color=self.colors[0], width=50, height=50, text = "", command=lambda: self.seleccionar_color(self.colors[0], número_de_color = 0, símbolo = ""))
         self.botón1_sel_color.pack(pady=2)
 
@@ -149,14 +149,34 @@ class Editor(Tk):
 
     # Guardar: va a guardar la imagen (matriz numérica) en formato .json #
     def guardar_matriz(self):
-        nombre_archivo = filedialog.asksaveasfilename(defaultextension=".Pyint", filetypes=[("Pyint files", "*.Pyint")])
+        filetypes = [("Pyint files", "*.Pyint"), ("PNG files", "*.png")]
+        nombre_archivo = filedialog.asksaveasfilename(defaultextension=".Pyint", filetypes=filetypes)
         if nombre_archivo:
-            with open(nombre_archivo, 'w') as f:
-                datos = {
-                    'matriz': self.matriz,
-                    'creador': self.creador
-                }
-                json.dump(datos, f)
+            if nombre_archivo.endswith('.png'):
+                self.matriz_a_png(self.matriz, nombre_archivo)
+            else:
+                with open(nombre_archivo, 'w') as f:
+                    datos = {
+                        'matriz': self.matriz,
+                        'creador': self.creador
+                    }
+                    json.dump(datos, f)
+    
+    def matriz_a_png(self, matriz, nombre_archivo):
+        # Convertir la matriz de índices en una matriz de colores
+        matriz_colores = [[self.colors[int(indice)] for indice in fila] for fila in matriz]
+    
+        # Convertir la matriz de colores en formato hexadecimal a una matriz de colores en formato RGB
+        matriz_rgb = [[tuple(int(hex_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4)) for hex_color in fila] for fila in matriz_colores]
+    
+        # Convertir la matriz a un array de numpy
+        array = np.array(matriz_rgb, dtype=np.uint8)
+    
+        # Crear una imagen a partir del array
+        imagen = Image.fromarray(array)
+    
+        # Guardar la imagen en un archivo .png
+        imagen.save(nombre_archivo)
 
     # Cargar: va a cargar la imagen (matriz numérica) en formato .json y desplegar por default la imagen en color #
     def cargar_matriz(self):
@@ -203,25 +223,25 @@ class Editor(Tk):
             for fila in range(16):
                 for columna in range(16):
                     if self.matriz[fila][columna] == 0:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#FFFFFF", bg_color="#FFFFFF")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color= self.colors[0], bg_color=self.colors[0])
                     elif self.matriz[fila][columna] == 1:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#ff0000", bg_color="#ff0000")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[1], bg_color=self.colors[1])
                     elif self.matriz[fila][columna] == 2:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#ff7700", bg_color="#ff7700")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[2], bg_color=self.colors[2])
                     elif self.matriz[fila][columna] == 3:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#ffe600", bg_color="#ffe600")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[3], bg_color=self.colors[3])
                     elif self.matriz[fila][columna] == 4:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#00ff0d", bg_color="#00ff0d")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[4], bg_color=self.colors[4])
                     elif self.matriz[fila][columna] == 5:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#00ffee", bg_color="#00ffee")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[5], bg_color=self.colors[5])
                     elif self.matriz[fila][columna] == 6:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#0011ff", bg_color="#0011ff")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[6], bg_color=self.colors[6])
                     elif self.matriz[fila][columna] == 7:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#7b00ff", bg_color="#7b00ff")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[7], bg_color=self.colors[7])
                     elif self.matriz[fila][columna] == 8:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#ff00fb", bg_color="#ff00fb")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[8], bg_color=self.colors[8])
                     elif self.matriz[fila][columna] == 9:
-                        self.tabla_clásica.insert(fila, columna, "", fg_color="#000000", bg_color="#000000")
+                        self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[9], bg_color=self.colors[9])
 
         elif self.edición.get() == "Edición con números":
             for fila in range(16):
