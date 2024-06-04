@@ -204,10 +204,6 @@ class Editor(Tk):
             info_creador = CTkLabel(self, text=f"Creado por: {self.creador}", bg_color= self.light_bg)
             info_creador.place(relx=0.97, rely=0.99, anchor='se')
 
-    # Editar: va a permitir editar la imagen (matriz numérica) en color #
-    def editar_img(self):
-        pass
-
     # Ver: va a permitir ver la imagen (ya sea a color, números y símbolos) en color #
     def ver_matriz_img(self):
         if self.edición.get() == "Edición con símbolos":
@@ -283,6 +279,10 @@ class Editor(Tk):
 
     # Método para cambiar el color de una celda
     def cambiar_color(self, value):
+
+        if self.alto_contraste_estado:
+            return
+
         if self.zoom_activo:
             self.seleccionar_zoom(value)
         else:
@@ -295,6 +295,10 @@ class Editor(Tk):
 
     # Método para cambiar el símbolo de una celda
     def cambiar_símbolo(self, value):
+
+        if self.alto_contraste_estado:
+            return
+
         if self.zoom_activo:
             self.seleccionar_zoom(value)
         else:
@@ -399,18 +403,18 @@ class Editor(Tk):
 
             self.botón_zoom.configure(state='normal')
         
-
-
-
     # Método para cambiar el número de una celda
     def cambiar_número(self, value):
+
+        if self.alto_contraste_estado:
+            return    
+
         if self.zoom_activo:
             self.seleccionar_zoom(value)
         else:
             columna = value["column"]
             fila = value["row"]
             self.matriz[fila][columna] = self.número_actual
-            #print(self.matriz)
             self.tabla_números.frame[fila, columna].configure(text= str(self.número_actual))
 
     # Cerrar: va a limpiar el lienzo para crear una imagen más #
@@ -428,9 +432,9 @@ class Editor(Tk):
                 for columna in range(16):
                     self.tabla_números.frame[fila, columna].configure(text="")
         self.matriz = [[0 for _ in range(16)] for _ in range(16)]
-        self.tabla_clásica.clear()
-        self.tabla_símbolos.clear()
-        self.tabla_números.clear()
+        #self.tabla_clásica.clear()
+        #self.tabla_símbolos.clear()
+        #self.tabla_números.clear()
 
     # Función que llamará a las funciones de transformaciones dependiendo del botón que se presione 
     def transformar_img(self, valor):
