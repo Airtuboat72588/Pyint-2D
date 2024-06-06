@@ -19,12 +19,13 @@ class Editor(Tk):
         super().__init__()
 
         # Configuración de la ventana
-        self.title("Pyint-2D")
-        self.state('zoomed')
-        self.light_bg ="#c4c4c4"
-        self.config(bg= self.light_bg)
-        set_appearance_mode("light")
-        self.resizable(False, False)
+        self.title("Pyint-2D") #Le añade el nombre del programa a la ventana
+        self.state('zoomed') #Activa el modo de ventana maximizada
+        self.light_bg ="#c4c4c4" #Establece el color del fondo
+        self.config(bg= self.light_bg) #Aplica el color de fondo
+        set_appearance_mode("light") #Establece como predeterminado el modo claro de CTk
+        self.resizable(False, False) #Desactiva la opción de redimencionar la ventana. 
+        self.dimensiones = 16 #Establece las dimensiones del area de dibujo y la matriz
 
         #Obtiene el nombre de usuario de windows
 
@@ -34,16 +35,18 @@ class Editor(Tk):
 
         self.alto_contraste_estado = False
 
-        #Variable de estado del zoom
+        #Variables de estado del zoom
 
         self.zoom_activo = False
         self.zoom_activo_b = False
 
         # Atributos
-        self.EstadoPrograma = "" # Creado, en proceso, terminado.
-        self.matriz = [[0 for _ in range(16)] for _ in range(16)]
+        self.EstadoPrograma = "Creado" # Creado, en proceso, terminado.
+        print(self.EstadoPrograma) #Muestra en la terminal el estado del programa.
+        self.matriz = [[0 for _ in range(self.dimensiones)] for _ in range(self.dimensiones)] #Define la matriz 
+        #Establece los valores predeterminados de color, símbolo y número
         self.color_actual = "White"
-        self.símbolo_actual = None
+        self.símbolo_actual = None 
         self.número_actual = "0"
 
         # Contenedor principal
@@ -110,15 +113,15 @@ class Editor(Tk):
         # Tablas de edición
 
         # Tabla clásica
-        self.tabla_clásica = CTkTable(master=self.edición.tab("Edición clásica"), row=16, column=16, command=self.cambiar_color, padx=2, pady=2, colors=["white", "white"], width=50, height=50, corner_radius=0)
+        self.tabla_clásica = CTkTable(master=self.edición.tab("Edición clásica"), row=self.dimensiones, column=self.dimensiones, command=self.cambiar_color, padx=2, pady=2, colors=["white", "white"], width=50, height=50, corner_radius=0)
         self.tabla_clásica.pack(pady=2)
 
         # Tabla de símbolos
-        self.tabla_símbolos = CTkTable(master=self.edición.tab("Edición con símbolos"), row=16, column=16, command=self.cambiar_símbolo, padx=2, pady=2, colors=["white", "white"], width=50, height=50, corner_radius=0)
+        self.tabla_símbolos = CTkTable(master=self.edición.tab("Edición con símbolos"), row=self.dimensiones, column=self.dimensiones, command=self.cambiar_símbolo, padx=2, pady=2, colors=["white", "white"], width=50, height=50, corner_radius=0)
         self.tabla_símbolos.pack(pady=2)
 
         # Tabla de números
-        self.tabla_números = CTkTable(master=self.edición.tab("Edición con números"), row=16, column=16, command=self.cambiar_número, padx=2, pady=2, colors=["white", "white"], width=50, height=50, corner_radius=0)
+        self.tabla_números = CTkTable(master=self.edición.tab("Edición con números"), row=self.dimensiones, column=self.dimensiones, command=self.cambiar_número, padx=2, pady=2, colors=["white", "white"], width=50, height=50, corner_radius=0)
         self.tabla_números.pack(pady=2)   
 
         # Contenedor de menú
@@ -175,13 +178,15 @@ class Editor(Tk):
                         'creador': self.creador
                     }
                     json.dump(datos, f)
+        self.EstadoPrograma = "Terminado" #Cambia el estado de EstadoPrograma al guardar el documento
+        print(self.EstadoPrograma)
     
     def matriz_a_png(self, matriz, nombre_archivo):
         # Convertir la matriz de índices en una matriz de colores
         matriz_colores = [[self.colors[int(indice)] for indice in fila] for fila in matriz]
     
         # Convertir la matriz de colores en formato hexadecimal a una matriz de colores en formato RGB
-        matriz_rgb = [[tuple(int(hex_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4)) for hex_color in fila] for fila in matriz_colores]
+        matriz_rgb = [[tuple(int(hex_color.lstrip('#')[i:i+2], self.dimensiones) for i in (0, 2, 4)) for hex_color in fila] for fila in matriz_colores]
     
         # Convertir la matriz a un array de numpy
         array = np.array(matriz_rgb, dtype=np.uint8)
@@ -211,8 +216,8 @@ class Editor(Tk):
     # Ver: va a permitir ver la imagen (ya sea a color, números y símbolos) en color #
     def ver_matriz_img(self):
         if self.edición.get() == "Edición con símbolos":
-            for fila in range(16):
-                for columna in range(16):
+            for fila in range(self.dimensiones):
+                for columna in range(self.dimensiones):
                     if self.matriz[fila][columna] == 0:
                         self.tabla_símbolos.frame[fila, columna].configure(text="")
                     elif self.matriz[fila][columna] == 1:
@@ -234,8 +239,8 @@ class Editor(Tk):
                     elif self.matriz[fila][columna] == 9:
                         self.tabla_símbolos.frame[fila, columna].configure(text="@")
         elif self.edición.get() == "Edición clásica":
-            for fila in range(16):
-                for columna in range(16):
+            for fila in range(self.dimensiones):
+                for columna in range(self.dimensiones):
                     if self.matriz[fila][columna] == 0:
                         self.tabla_clásica.insert(fila, columna, "", fg_color= self.colors[0], bg_color=self.colors[0])
                     elif self.matriz[fila][columna] == 1:
@@ -258,8 +263,8 @@ class Editor(Tk):
                         self.tabla_clásica.insert(fila, columna, "", fg_color=self.colors[9], bg_color=self.colors[9])
 
         elif self.edición.get() == "Edición con números":
-            for fila in range(16):
-                for columna in range(16):
+            for fila in range(self.dimensiones):
+                for columna in range(self.dimensiones):
                     if self.matriz[fila][columna] == 0:
                         self.tabla_números.frame[fila, columna].configure(text="0")
                     elif self.matriz[fila][columna] == 1:
@@ -388,6 +393,8 @@ class Editor(Tk):
         
             self.zoom_activo_b = True
 
+            print("Zoom activado exitosamente")
+
         else:
             # Restaurar la matriz original
             self.matriz = [fila[:] for fila in self.matriz_original]
@@ -398,9 +405,8 @@ class Editor(Tk):
             self.zoom_activo_b = False
 
             self.botón_zoom.configure(state='normal')
-        
 
-
+            print("Zoom desactivado exitosamente")
 
     # Método para cambiar el número de una celda
     def cambiar_número(self, value):
@@ -416,18 +422,18 @@ class Editor(Tk):
     # Cerrar: va a limpiar el lienzo para crear una imagen más #
     def cerrar_img(self):
         if self.edición.get() == "Edición clásica":
-            for fila in range(16):
-                for columna in range(16):
+            for fila in range(self.dimensiones):
+                for columna in range(self.dimensiones):
                     self.tabla_clásica.insert(fila, columna, "", fg_color="#FFFFFF", bg_color="#FFFFFF")
         elif self.edición.get() == "Edición con símbolos":
-            for fila in range(16):
-                for columna in range(16):
+            for fila in range(self.dimensiones):
+                for columna in range(self.dimensiones):
                     self.tabla_símbolos.frame[fila, columna].configure(text="")
         elif self.edición.get() == "Edición con números":
-            for fila in range(16):
-                for columna in range(16):
+            for fila in range(self.dimensiones):
+                for columna in range(self.dimensiones):
                     self.tabla_números.frame[fila, columna].configure(text="")
-        self.matriz = [[0 for _ in range(16)] for _ in range(16)]
+        self.matriz = [[0 for _ in range(self.dimensiones)] for _ in range(self.dimensiones)]
         self.tabla_clásica.clear()
         self.tabla_símbolos.clear()
         self.tabla_números.clear()
@@ -516,8 +522,8 @@ class Editor(Tk):
         if self.alto_contraste_estado == False:
             self.Matriz_original = copy.deepcopy(self.matriz)
             self.alto_contraste_estado = True
-            for fila in range(16):
-                for columna in range(16):
+            for fila in range(self.dimensiones):
+                for columna in range(self.dimensiones):
                     if self.matriz[fila][columna] < 5:
                         self.matriz[fila][columna] = 0
                     else:
