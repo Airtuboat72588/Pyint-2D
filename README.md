@@ -5,7 +5,20 @@ creativa para la creación y manipulación de imágenes de Píxel Art, combinand
 
 **Autores:** Josue Hidalgo (2024800128) e Ian Guzmán (2024306630).
 
+**Dependencias necesarias:**
+
+* Python 3.11
+* Custom Tkinter
+* CTkTable
+* Pillow
+* Numpy
+
+Estas pueden ser instaladas desde la terminal con el siguiente comando: 
+
+```bash
+pip install customtkinter CTkTable pillow numpy
+```
+
 **Ayuda:**
 
 **Documentación Externa:** https://shorturl.at/IkXRH
-**Video Tutorial:** <Insert Link>
