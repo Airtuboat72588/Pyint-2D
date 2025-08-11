@@ -14,7 +14,7 @@ class Editor(Tk):
 
     # Constructor
     def __init__(self):
-
+#hola amigos
         # Inicializamos la clase padre (quien es tkinter.Tk)
         super().__init__()
 
